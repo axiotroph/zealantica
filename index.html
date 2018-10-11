@@ -5,15 +5,18 @@
   <title>Zealantica</title>
 </head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+  <script type="module" src="UI.js"></script>
 <body>
-  <script type="text/javascript">
-    "use strict";
+  <script type="module">
+    import UI from "./UI.js";
     
     const stage_dimensions = {width: 800, height: 800};
     const unit_dimensions = {width: 64, height: 64};
+    const p2_offset = 300;
     
     class Unit {
-      constructor(x, y) {
+      constructor(player, x, y) {
+        this.player = player;
         this.x = x;
         this.y = y;
         this.health = 100;
@@ -30,11 +33,13 @@
     
     
       let units = [];
-      [0, 1, 2].forEach((x) => {
-        [0, 1, 2].forEach((y) => {
-          units.push(new Unit(x, y));
-        });
-      });     
+      [0, 1].forEach((i) => {
+        [0, 1, 2].forEach((x) => {
+          [0, 1, 2].forEach((y) => {
+            units.push(new Unit(i, x, y));
+          });
+        });     
+      });
   
       let texture = PIXI.utils.TextureCache["assets/unit.png"];
       let sprite = new PIXI.Sprite(texture);
@@ -42,7 +47,7 @@
       units.forEach((x) => {
         let sprite = new PIXI.Sprite(texture);
         sprite.x = x.x * (unit_dimensions.width + 5);
-        sprite.y = x.y * (unit_dimensions.height + 5);
+        sprite.y = x.y * (unit_dimensions.height + 5) + p2_offset*x.player;
         app.stage.addChild(sprite);
       });
       
