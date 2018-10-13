@@ -23,11 +23,19 @@ export default class UI {
       this.unitTiles[x.id] = new UnitTile(this, x);
     });
   }
+
+  unitSelect(unit) {
+    console.log("trying to select ");
+    console.dir(unit);
+
+  }
+
 }
 
 class UnitTile {
 
   constructor(ui, unitState) {
+    this.ui = ui;
     this.unitState = unitState;
 
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
@@ -40,7 +48,7 @@ class UnitTile {
     this.selectBorder = this.drawBorder(selectBorderColor);
 
     this.sprite.interactive = true;
-    this.sprite.on('click', (e) => this.onClick(e));
+    this.sprite.on('click', (e) => this.ui.unitSelect(this));
     this.sprite.on('mouseover', (e) => this.hoverBorder.visible = true);
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
 
@@ -59,9 +67,5 @@ class UnitTile {
     this.sprite.addChild(border);
 
     return border;
-  }
-
-  onClick(event) {
-    this.selectBorder.visible = true;
   }
 }
