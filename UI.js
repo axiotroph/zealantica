@@ -34,14 +34,13 @@ export default class UI extends EventTarget{
   unitSelect(unit){
     if(this.state === "actorSelect"){
       log.trace("actor is " + unit.id);
-      this.stateData.actor = unit.id;
+      this.stateData.turn.actor = unit.id;
       this.state = "targetSelect";
     }else if(this.state === "targetSelect"){
       log.trace("target is " + unit.id);
-      this.stateData.target = unit.id;
+      this.stateData.turn.target = unit.id;
 
-      let event = new Event('turnReady', this.stateData);
-      this.dispatchEvent(event);
+      this.dispatchEvent(this.stateData);
 
       this.resetState();
     }
@@ -49,7 +48,8 @@ export default class UI extends EventTarget{
 
   resetState(){
     this.state = "idle";
-    this.stateData = {};
+    this.stateData = new CustomEvent("turnReady");
+    this.stateData.turn = {};
   }
 
   listenForTurn(){

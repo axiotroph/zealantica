@@ -1,7 +1,7 @@
 import UI from "./UI.js";
-import Unit from "./Unit.js";
-import Log from "./Log.js";
+import Battle from "./Battle.js";
 
+import Log from "./Log.js";
 let log = Log("main");
 
 class Zealantica {
@@ -16,24 +16,18 @@ class Zealantica {
   }
 
   postload() {
-    log.info("Building initial state...");
+    this.battle = new Battle();
 
-    let units = [];
-    [0, 1].forEach((i) => {
-      [0, 1, 2].forEach((x) => {
-        [0, 1, 2].forEach((y) => {
-          units.push(new Unit(i, x, y));
-        });
-      });     
-    });
+    this.ui.drawNewState(this.battle);
 
-    this.ui.drawNewState({'units': units});
+    this.ui.addEventListener('turnReady', this.turnReady.bind(this));
+    this.ui.listenForTurn();
 
     log.info("Running");
-    this.mainLoop();
   }
 
-  mainLoop() {
+  turnReady(details){
+    this.battle.applyTurn(details);
     this.ui.listenForTurn();
   }
 }
