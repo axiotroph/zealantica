@@ -14,7 +14,7 @@ export default class UI extends EventTarget{
     super();
 
     this.app = new PIXI.Application(stageDimensions);
-    document.body.appendChild(this.app.view);
+    document.getElementById("render").appendChild(this.app.view);
 
     this.resetState();
   }

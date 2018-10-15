@@ -1,5 +1,11 @@
+let logDiv = document.getElementById("log");
+
 function write(writer, prefix, severity, content) {
-  console.log('[' + prefix + '][' + writer.name + ']: ' + content);
+  let str = '[' + prefix + '][' + writer.name + ']: ' + content;
+  console.log(str);
+
+  logDiv.innerHTML += "<br>";
+  logDiv.innerHTML += str;
 }
 
 class LogWriter {
