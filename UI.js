@@ -4,6 +4,8 @@ const borderThickness = 4;
 const p2Offset = 300;
 const hoverBorderColor = 0xAAAAAA;
 const selectBorderColor = 0x666666;
+const healthHeight = 8;
+const healthColor = 0x00FF00;
 
 import Log from "./Log.js";
 let log = Log("UI");
@@ -31,6 +33,15 @@ export default class UI extends EventTarget{
     });
   }
 
+  resetState(){
+    this.state = "idle";
+    this.stateData = {};
+  }
+
+  update(){
+    Object.values(this.unitTiles).forEach((x) => x.update());
+  }
+
   unitSelect(unit){
     if(this.state === "actorSelect"){
       log.trace("actor is " + unit.id);
@@ -40,22 +51,21 @@ export default class UI extends EventTarget{
       log.trace("target is " + unit.id);
       this.stateData.turn.target = unit.id;
 
-      this.dispatchEvent(this.stateData);
-
+      let event = this.stateData;
       this.resetState();
+
+      this.dispatchEvent(event);
+    }else{
+      log.warn("tried to select a unit in unknown state");
     }
   }
 
-  resetState(){
-    this.state = "idle";
+  listenForTurn(){
+    this.state = "actorSelect";
     this.stateData = new CustomEvent("turnReady");
     this.stateData.turn = {};
-  }
 
-  listenForTurn(){
     log.trace("waiting for turn input");
-    this.resetState();
-    this.state = "actorSelect";
   }
 }
 
@@ -71,6 +81,13 @@ class UnitTile {
     this.sprite.x = unitState.x * (unitDimensions.width + 5);
     this.sprite.y = unitState.y * (unitDimensions.height + 5) + p2Offset*unitState.player;
 
+    this.healthBar = new PIXI.Graphics();
+    this.healthBar.beginFill(healthColor);
+    this.healthBar.drawRect(0, unitDimensions.height - healthHeight, unitDimensions.width, healthHeight);
+    this.healthBar.endFill();
+    this.sprite.addChild(this.healthBar);
+
+    this.update();
     this.hoverBorder = this.drawBorder(hoverBorderColor);
     this.selectBorder = this.drawBorder(selectBorderColor);
 
@@ -94,5 +111,9 @@ class UnitTile {
     this.sprite.addChild(border);
 
     return border;
+  }
+
+  update(){
+    this.healthBar.width = unitDimensions.width * (this.unitState.health / 100);
   }
 }

@@ -14,7 +14,7 @@ export default class Unit {
 
   performAbility(other){
     log.info("Unit " + this.id + " attacks unit " + other.id + " for 10 damage!");
-    other.health -= 10;
+    other.health = Math.max(0, other.health - 10);
   }
 }
 

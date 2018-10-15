@@ -28,6 +28,7 @@ class Zealantica {
 
   turnReady(details){
     this.battle.applyTurn(details);
+    this.ui.update();
     this.ui.listenForTurn();
   }
 }
