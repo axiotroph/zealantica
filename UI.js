@@ -26,7 +26,7 @@ export default class UI extends EventTarget{
   drawNewState(state){
     this.unitTiles = {};
 
-    state.units.forEach((x) => {
+    Object.values(state.units).forEach((x) => {
       this.unitTiles[x.id] = new UnitTile(this, x);
     });
   }
