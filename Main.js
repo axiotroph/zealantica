@@ -1,5 +1,8 @@
 import UI from "./UI.js";
 import Unit from "./Unit.js";
+import Log from "./Log.js";
+
+let log = Log("main");
 
 class Zealantica {
   go() {
@@ -8,12 +11,12 @@ class Zealantica {
   }
 
   preload() {
-    console.log("Loading");
+    log.info("Loading...");
     this.ui = new UI();
   }
 
   postload() {
-    console.log("Building state");
+    log.info("Building initial state...");
 
     let units = [];
     [0, 1].forEach((i) => {
@@ -26,11 +29,12 @@ class Zealantica {
 
     this.ui.drawNewState({'units': units});
 
-    console.log("Running");
+    log.info("Running");
     this.mainLoop();
   }
 
   mainLoop() {
+    this.ui.listenForTurn();
   }
 }
 

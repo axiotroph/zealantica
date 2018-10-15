@@ -5,18 +5,25 @@ const p2Offset = 300;
 const hoverBorderColor = 0xAAAAAA;
 const selectBorderColor = 0x666666;
 
-export default class UI {
+import Log from "./Log.js";
+let log = Log("UI");
 
-  constructor() {
+export default class UI extends EventTarget{
+
+  constructor(){
+    super();
+
     this.app = new PIXI.Application(stageDimensions);
     document.body.appendChild(this.app.view);
+
+    this.resetState();
   }
 
-  load(callback) {
+  load(callback){
     PIXI.loader.add("assets/unit.png").load(callback);
   }
 
-  drawNewState(state) {
+  drawNewState(state){
     this.unitTiles = {};
 
     state.units.forEach((x) => {
@@ -24,17 +31,37 @@ export default class UI {
     });
   }
 
-  unitSelect(unit) {
-    console.log("trying to select ");
-    console.dir(unit);
+  unitSelect(unit){
+    if(this.state === "actorSelect"){
+      log.trace("actor is " + unit.id);
+      this.stateData.actor = unit.id;
+      this.state = "targetSelect";
+    }else if(this.state === "targetSelect"){
+      log.trace("target is " + unit.id);
+      this.stateData.target = unit.id;
 
+      let event = new Event('turnReady', this.stateData);
+      this.dispatchEvent(event);
+
+      this.resetState();
+    }
   }
 
+  resetState(){
+    this.state = "idle";
+    this.stateData = {};
+  }
+
+  listenForTurn(){
+    log.trace("waiting for turn input");
+    this.resetState();
+    this.state = "actorSelect";
+  }
 }
 
 class UnitTile {
 
-  constructor(ui, unitState) {
+  constructor(ui, unitState){
     this.ui = ui;
     this.unitState = unitState;
 
@@ -48,7 +75,7 @@ class UnitTile {
     this.selectBorder = this.drawBorder(selectBorderColor);
 
     this.sprite.interactive = true;
-    this.sprite.on('click', (e) => this.ui.unitSelect(this));
+    this.sprite.on('click', (e) => this.ui.unitSelect(this.unitState));
     this.sprite.on('mouseover', (e) => this.hoverBorder.visible = true);
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
 
