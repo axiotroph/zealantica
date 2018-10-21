@@ -1,0 +1,32 @@
+Planned mechanics:
+- Attack patterns
+- Action Economy
+-  Activations as a resource
+-  AP w/ diminishing returns to encourage smooth flow
+-  AP debt, for magics you shouldn't have to plan around
+- Magic
+-  Primarily utility, magic as dps is rare
+-  Gated by MP, a discrete resource
+-  MP regen is very hard (impossible?) to increase
+-  Certain spells (ex: mana seal) may additionally have cooldowns
+- Stun
+
+Should AP go negative: yes
+- MP should be the only limiting factor on spells to allow tight balance
+
+Surface MCP as a resource, call it MP
+- Very hard to increase more than default regen (but not necessarily impossible; just can't make stunlocks free)
+- Do not give spells cooldowns; make the balance so that if you can feed an excorcist enough MP to doublecast mana seal, you get to, just make that very hard
+- Default regen can be statted per-class
+
+Stats
+- Attack
+-- Damage of normal attack and physical scaling abilities (rare)
+- Defense
+-- Resistance to physical damage
+- Magic Attack
+-- Damage of magical scaling abilites and effects. All abilties should have at least one number that scales.
+- Magic Defense
+-- Opposes magic attack
+- AP regen
+- probably don't paramterize mp; just keep it simple turn counts
