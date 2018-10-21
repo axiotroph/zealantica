@@ -1,0 +1,27 @@
+Stats
+- Attack
+-- Damage of normal attack and physical scaling abilities (rare)
+- Defense
+-- Resistance to physical damage
+- Health
+-- Proportionally cheaper than defense
+- Magic Attack (int)
+-- Damage of magical scaling abilites and effects. All abilties should have at least one number that scales,
+   and should in total be more or less linear.
+- Magic Defense
+-- Opposes magic attack
+- AP regen
+- probably don't paramterize mp; just keep it simple turn counts
+
+
+Numbers
+- Call 100 the base value for simplicity
+- Buffs and modifiers should generally be constants, not multiples. That gives a very simple and understandable
+  stacking implementation that still gives diminishing returns.
+
+
+Formulas
+Damage:
+  Is there a reason to not just use base*attack/defense? (plus an offset for
+  spells). It gives no opportunity for "no damage" effects, but I'm not sure
+  that's really necessary in the first place. 
