@@ -43,20 +43,31 @@ export default class UI extends EventTarget{
   }
 
   unitSelect(unit){
+    let turn = this.stateData.turn;
     if(this.state === "actorSelect"){
       log.trace("actor is " + unit.id);
-      this.stateData.turn.actor = unit.id;
+      turn.actor = unit;
+      turn.action = unit.ability;
       this.state = "targetSelect";
     }else if(this.state === "targetSelect"){
-      log.trace("target is " + unit.id);
-      this.stateData.turn.target = unit.id;
+      if(turn.action.canTarget(turn.actor, unit)){
+        log.trace("target is " + unit.id);
+        turn.target = unit;
 
-      let event = this.stateData;
-      this.resetState();
-
-      this.dispatchEvent(event);
+        let event = this.stateData;
+        this.resetState();
+        this.dispatchEvent(event);
+      }
     }else{
       log.warn("tried to select a unit in unknown state");
+    }
+  }
+
+  enableHover(unit){
+    if(this.state == "targetSelect"){
+      return this.stateData.turn.action.canTarget(this.stateData.turn.actor, unit);
+    }else{
+      return true;
     }
   }
 
@@ -93,7 +104,7 @@ class UnitTile {
 
     this.sprite.interactive = true;
     this.sprite.on('click', (e) => this.ui.unitSelect(this.unitState));
-    this.sprite.on('mouseover', (e) => this.hoverBorder.visible = true);
+    this.sprite.on('mouseover', (e) => this.hoverBorder.visible = this.ui.enableHover(this.unitState));
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
 
 

@@ -22,6 +22,6 @@ export default class Battle{
 
   applyTurn(event){
     log.trace("applying turn " + JSON.stringify(event.turn));
-    this.units[event.turn.actor].performAbility(this.units[event.turn.target]);
+    event.turn.action.perform(event.turn.actor, event.turn.target);
   }
 }

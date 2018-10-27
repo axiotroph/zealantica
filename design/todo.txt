@@ -1,2 +1,11 @@
+Attack selection
+AP/turns
 
+graphics layout
+Tooltip pane
 
+Patterns
+Stun
+
+Stats
+Magic
