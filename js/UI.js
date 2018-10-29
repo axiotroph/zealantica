@@ -17,8 +17,6 @@ export default class UI extends EventTarget{
 
     this.app = new PIXI.Application(stageDimensions);
     document.getElementById("render").appendChild(this.app.view);
-
-    this.resetState();
   }
 
   load(callback){
@@ -33,49 +31,56 @@ export default class UI extends EventTarget{
     });
   }
 
-  resetState(){
-    this.state = "idle";
-    this.stateData = {};
-  }
-
   update(){
     Object.values(this.unitTiles).forEach((x) => x.update());
   }
 
-  unitSelect(unit){
-    let turn = this.stateData.turn;
+  unitSelect(tile){
     if(this.state === "actorSelect"){
-      log.trace("actor is " + unit.id);
-      turn.actor = unit;
-      turn.action = unit.ability;
+      this.select(tile);
       this.state = "targetSelect";
+      log.trace("actor is " + tile.unitState.id);
     }else if(this.state === "targetSelect"){
-      if(turn.action.canTarget(turn.actor, unit)){
-        log.trace("target is " + unit.id);
-        turn.target = unit;
+      if(this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState)){
+        this.selectedTargetTile = tile;
+        log.trace("target is " + tile.unitState.id);
 
-        let event = this.stateData;
-        this.resetState();
-        this.dispatchEvent(event);
+        this.dispatchEvent(new CustomEvent("actionReady", {'detail': {
+          "actor": this.selectedTile.unitState,
+          "action": this.selectedAction,
+          "target": this.selectedTargetTile.unitState
+        }}));
+
+        this.state = "idle";
+        this.clearSelect();
       }
-    }else{
-      log.warn("tried to select a unit in unknown state");
     }
   }
 
-  enableHover(unit){
-    if(this.state == "targetSelect"){
-      return this.stateData.turn.action.canTarget(this.stateData.turn.actor, unit);
+  select(tile){
+    this.selectedTile = tile;
+    this.selectedAction = tile.unitState.ability;
+    tile.select();
+  }
+
+  clearSelect(){
+    if(this.selectedTile){
+      this.selectedTile.deselect();
+    }
+    this.selectedTile = null;
+  }
+
+  isTileHoverable(tile){
+    if(this.selectedAction){
+      return this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState);
     }else{
       return true;
     }
   }
 
   listenForTurn(){
+    this.clearSelect();
     this.state = "actorSelect";
-    this.stateData = new CustomEvent("turnReady");
-    this.stateData.turn = {};
-
     log.trace("waiting for turn input");
   }
 }
@@ -103,8 +108,8 @@ class UnitTile {
     this.selectBorder = this.drawBorder(selectBorderColor);
 
     this.sprite.interactive = true;
-    this.sprite.on('click', (e) => this.ui.unitSelect(this.unitState));
-    this.sprite.on('mouseover', (e) => this.hoverBorder.visible = this.ui.enableHover(this.unitState));
+    this.sprite.on('click', (e) => this.ui.unitSelect(this));
+    this.sprite.on('mouseover', (e) => this.hoverBorder.visible = this.ui.isTileHoverable(this));
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
 
 
@@ -122,6 +127,14 @@ class UnitTile {
     this.sprite.addChild(border);
 
     return border;
+  }
+
+  select(){
+    this.selectBorder.visible = true;
+  }
+
+  deselect(){
+    this.selectBorder.visible = false;
   }
 
   update(){

@@ -20,14 +20,14 @@ class Zealantica {
 
     this.ui.drawNewState(this.battle);
 
-    this.ui.addEventListener('turnReady', this.turnReady.bind(this));
+    this.ui.addEventListener('actionReady', this.turnReady.bind(this));
     this.ui.listenForTurn();
 
     log.info("Running");
   }
 
   turnReady(details){
-    this.battle.applyTurn(details);
+    this.battle.applyAction(details);
     this.ui.update();
     this.ui.listenForTurn();
   }

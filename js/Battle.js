@@ -20,8 +20,8 @@ export default class Battle{
     });
   }
 
-  applyTurn(event){
-    log.trace("applying turn " + JSON.stringify(event.turn));
-    event.turn.action.perform(event.turn.actor, event.turn.target);
+  applyAction(event){
+    log.trace("applying action " + JSON.stringify(event.detail));
+    event.detail.action.perform(event.detail.actor, event.detail.target);
   }
 }
