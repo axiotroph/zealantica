@@ -45,14 +45,15 @@ export default class UI extends EventTarget{
         this.selectedTargetTile = tile;
         log.trace("target is " + tile.unitState.id);
 
-        this.dispatchEvent(new CustomEvent("actionReady", {'detail': {
+        this.state = "idle";
+        let data = {
           "actor": this.selectedTile.unitState,
           "action": this.selectedAction,
           "target": this.selectedTargetTile.unitState
-        }}));
+        };
 
-        this.state = "idle";
         this.clearSelect();
+        this.dispatchEvent(new CustomEvent("actionReady", {'detail': data}));
       }
     }
   }
@@ -71,7 +72,7 @@ export default class UI extends EventTarget{
   }
 
   isTileHoverable(tile){
-    if(this.selectedAction){
+    if(this.selectedTile && this.selectedAction){
       return this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState);
     }else{
       return true;
