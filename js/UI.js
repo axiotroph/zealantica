@@ -12,7 +12,7 @@ let log = Log("UI");
 
 export default class UI extends EventTarget{
 
-  constructor(){
+  constructor(battle){
     super();
 
     this.app = new PIXI.Application(stageDimensions);
@@ -23,10 +23,11 @@ export default class UI extends EventTarget{
     PIXI.loader.add("assets/unit.png").load(callback);
   }
 
-  drawNewState(state){
+  drawNewState(battle){
+    this.battle = battle;
     this.unitTiles = {};
 
-    Object.values(state.units).forEach((x) => {
+    Object.values(battle.units).forEach((x) => {
       this.unitTiles[x.id] = new UnitTile(this, x);
     });
   }
@@ -36,7 +37,7 @@ export default class UI extends EventTarget{
   }
 
   unitSelect(tile){
-    if(this.state === "actorSelect"){
+    if(this.state === "actorSelect" && tile.unitState.player == this.battle.activePlayer){
       this.select(tile);
       this.state = "targetSelect";
       log.trace("actor is " + tile.unitState.id);
