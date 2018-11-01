@@ -6,6 +6,7 @@ const hoverBorderColor = 0xAAAAAA;
 const selectBorderColor = 0x666666;
 const healthHeight = 8;
 const healthColor = 0x00FF00;
+const apOffset = 3;
 
 import Log from "./Log.js";
 let log = Log("UI");
@@ -105,7 +106,6 @@ class UnitTile {
     this.healthBar.endFill();
     this.sprite.addChild(this.healthBar);
 
-    this.update();
     this.hoverBorder = this.drawBorder(hoverBorderColor);
     this.selectBorder = this.drawBorder(selectBorderColor);
 
@@ -114,7 +114,11 @@ class UnitTile {
     this.sprite.on('mouseover', (e) => this.hoverBorder.visible = this.ui.isTileHoverable(this));
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
 
+    this.ap = new PIXI.Text("50");
+    this.ap.position.set(apOffset, apOffset);
+    this.sprite.addChild(this.ap);
 
+    this.update();
     ui.app.stage.addChild(this.sprite);
   }
 
@@ -141,5 +145,6 @@ class UnitTile {
 
   update(){
     this.healthBar.width = unitDimensions.width * (this.unitState.health / 100);
+    this.ap.text = "" + this.unitState.ap;
   }
 }
