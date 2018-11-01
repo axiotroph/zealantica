@@ -13,6 +13,22 @@ export default class UI extends EventTarget{
 
     this.app = new PIXI.Application(frame.stageDimensions);
     document.getElementById("render").appendChild(this.app.view);
+
+    this.leftPanel = this.drawPanel(this.app.stage, frame.leftPanel, 0x222222);
+    this.rightPanel = this.drawPanel(this.app.stage, frame.rightPanel, 0x222222);
+    this.field = this.drawPanel(this.app.stage, frame.field, 0x333333);
+    this.formations = {};
+    this.formations[0] = this.drawPanel(this.field, frame.formation0, 0x444444);
+    this.formations[1] = this.drawPanel(this.field, frame.formation1, 0x555555);
+  }
+
+  drawPanel(parent, panelDimensions, color){
+    let result = new PIXI.Graphics();
+    result.beginFill(color);
+    result.drawRect(panelDimensions.x, panelDimensions.y, panelDimensions.width, panelDimensions.height);
+    result.endFill();
+    parent.addChild(result);
+    return result;
   }
 
   load(callback){
@@ -94,12 +110,17 @@ class UnitTile {
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
     this.sprite = new PIXI.Sprite(texture);
 
-    this.sprite.x = unitState.x * (frame.unitDimensions.width + 5);
-    this.sprite.y = unitState.y * (frame.unitDimensions.height + 5) + frame.p2Offset*unitState.player;
+    console.log(unitState);
+    console.log(frame.units);
+    let spriteDimensions = frame.units[unitState.player][(unitState.x, unitState.y)];
+    this.sprite.x = spriteDimensions.x;
+    this.sprite.y = spriteDimensions.y;
+    this.sprite.width = spriteDimensions.width;
+    this.sprite.height = spriteDimensions.height;
 
     this.healthBar = new PIXI.Graphics();
     this.healthBar.beginFill(healthColor);
-    this.healthBar.drawRect(0, frame.unitDimensions.height - frame.healthHeight, frame.unitDimensions.width, frame.healthHeight);
+    this.healthBar.drawRect(0, spriteDimensions.height - frame.healthHeight, spriteDimensions.width, frame.healthHeight);
     this.healthBar.endFill();
     this.sprite.addChild(this.healthBar);
 

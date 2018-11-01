@@ -37,8 +37,9 @@ let unitOffset = unitSpaceWidth + unitSideLength;
 frame.units = {};
 frame.units[0] = {};
 [0, 1, 2].forEach((x) => {
+  frame.units[0][x] = {};
   [0, 1, 2].forEach((y) => {
-    frame.units[0][(x, y)] = {
+    frame.units[0][x][y] = {
       x: x*unitOffset, 
       y: y*unitOffset, 
       height: unitSideLength, 
@@ -46,17 +47,19 @@ frame.units[0] = {};
   });
 });
 
-frame.units = {};
 frame.units[1] = {};
 [0, 1, 2].forEach((x) => {
+  frame.units[1][2-x] = {};
   [0, 1, 2].forEach((y) => {
-    frame.units[1][(2-x, 2-y)] = {
+    frame.units[1][2-x][2-y] = {
       x: x*unitOffset, 
       y: y*unitOffset, 
       height: unitSideLength, 
       width: unitSideLength};
   });
 });
+
+    console.dir(frame.units);
 
 const unitIndicatorBarRatio = 0.2;
 const unitTextOffsetRatio = 0.1;
