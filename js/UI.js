@@ -1,22 +1,17 @@
-const stageDimensions = {width: 800, height: 800};
-const unitDimensions = {width: 64, height: 64};
-const borderThickness = 4;
-const p2Offset = 300;
-const hoverBorderColor = 0xAAAAAA;
-const selectBorderColor = 0x666666;
-const healthHeight = 8;
-const healthColor = 0x00FF00;
-const apOffset = 3;
-
+import frame from "./Frame.js";
 import Log from "./Log.js";
 let log = Log("UI");
+
+const hoverBorderColor = 0xAAAAAA;
+const selectBorderColor = 0x666666;
+const healthColor = 0x00FF00;
 
 export default class UI extends EventTarget{
 
   constructor(battle){
     super();
 
-    this.app = new PIXI.Application(stageDimensions);
+    this.app = new PIXI.Application(frame.stageDimensions);
     document.getElementById("render").appendChild(this.app.view);
   }
 
@@ -99,12 +94,12 @@ class UnitTile {
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
     this.sprite = new PIXI.Sprite(texture);
 
-    this.sprite.x = unitState.x * (unitDimensions.width + 5);
-    this.sprite.y = unitState.y * (unitDimensions.height + 5) + p2Offset*unitState.player;
+    this.sprite.x = unitState.x * (frame.unitDimensions.width + 5);
+    this.sprite.y = unitState.y * (frame.unitDimensions.height + 5) + frame.p2Offset*unitState.player;
 
     this.healthBar = new PIXI.Graphics();
     this.healthBar.beginFill(healthColor);
-    this.healthBar.drawRect(0, unitDimensions.height - healthHeight, unitDimensions.width, healthHeight);
+    this.healthBar.drawRect(0, frame.unitDimensions.height - frame.healthHeight, frame.unitDimensions.width, frame.healthHeight);
     this.healthBar.endFill();
     this.sprite.addChild(this.healthBar);
 
@@ -117,7 +112,7 @@ class UnitTile {
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
 
     this.ap = new PIXI.Text("50");
-    this.ap.position.set(apOffset, apOffset);
+    this.ap.position.set(frame.apOffset, frame.apOffset);
     this.sprite.addChild(this.ap);
 
     this.update();
@@ -127,9 +122,9 @@ class UnitTile {
   drawBorder(color){
     let border = new PIXI.Graphics();
 
-    border.lineStyle(borderThickness, color);
-    let offset = borderThickness/2;
-    border.drawRect(offset, offset, unitDimensions.width - offset - 1, unitDimensions.height - offset - 1);
+    border.lineStyle(frame.borderThickness, color);
+    let offset = frame.borderThickness/2;
+    border.drawRect(offset, offset, frame.unitDimensions.width - offset - 1, frame.unitDimensions.height - offset - 1);
 
     border.visible = false;
     this.sprite.addChild(border);
@@ -146,7 +141,7 @@ class UnitTile {
   }
 
   update(){
-    this.healthBar.width = unitDimensions.width * (this.unitState.health / 100);
+    this.healthBar.width = frame.unitDimensions.width * (this.unitState.health / 100);
     this.ap.text = "" + this.unitState.ap;
   }
 }
