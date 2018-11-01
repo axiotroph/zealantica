@@ -110,8 +110,6 @@ class UnitTile {
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
     this.sprite = new PIXI.Sprite(texture);
 
-    console.log(unitState);
-    console.log(frame.units);
     let spriteDimensions = frame.units[unitState.player][(unitState.x, unitState.y)];
     this.sprite.x = spriteDimensions.x;
     this.sprite.y = spriteDimensions.y;
@@ -137,7 +135,7 @@ class UnitTile {
     this.sprite.addChild(this.ap);
 
     this.update();
-    ui.app.stage.addChild(this.sprite);
+    ui.formations[unitState.player].addChild(this.sprite);
   }
 
   drawBorder(color){
@@ -145,7 +143,7 @@ class UnitTile {
 
     border.lineStyle(frame.borderThickness, color);
     let offset = frame.borderThickness/2;
-    border.drawRect(offset, offset, frame.unitDimensions.width - offset - 1, frame.unitDimensions.height - offset - 1);
+    border.drawRect(offset, offset, frame.unitSideLength - offset - 1, frame.unitSideLength - offset - 1);
 
     border.visible = false;
     this.sprite.addChild(border);
@@ -162,7 +160,7 @@ class UnitTile {
   }
 
   update(){
-    this.healthBar.width = frame.unitDimensions.width * (this.unitState.health / 100);
+    this.healthBar.width = frame.unitSideLength * (this.unitState.health / 100);
     this.ap.text = "" + this.unitState.ap;
   }
 }
