@@ -12,6 +12,8 @@ export default class Unit {
     this.health = 100;
     this.id = newUID();
     this.ability = basicAttack;
+    this.ap = 0;
+    this.apRegen = 74;
   }
 }
 

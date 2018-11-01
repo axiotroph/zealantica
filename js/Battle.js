@@ -22,6 +22,8 @@ export default class Battle{
     this.activePlayer = Math.floor(Math.random() * 2);
     this.turnCount = 0;
     this.nextTurn();
+    this.nextTurn();
+    this.nextTurn();
   }
 
   applyAction(event){
@@ -37,7 +39,12 @@ export default class Battle{
   nextTurn(){
     this.turnCount++;
     this.activePlayer = (this.activePlayer + 1) % 2;
+
+    Object.values(this.units).filter((u) => u.player == this.activePlayer)
+      .forEach((u) => u.ap += u.apRegen);
+
     this.activationsRemaining = 5;
+
     log.info("Starting turn " + this.turnCount);
   }
 }
