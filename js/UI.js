@@ -38,7 +38,7 @@ export default class UI extends EventTarget{
   }
 
   unitSelect(tile){
-    if(this.state === "actorSelect" && tile.unitState.player == this.battle.activePlayer){
+    if(this.state === "actorSelect" && tile.unitState.player == this.battle.activePlayer && tile.unitState.canAct()){
       this.select(tile);
       this.state = "targetSelect";
       log.trace("actor is " + tile.unitState.id);
@@ -74,7 +74,9 @@ export default class UI extends EventTarget{
   }
 
   isTileHoverable(tile){
-    if(this.selectedTile && this.selectedAction){
+    if(this.state == "actorSelect"){
+      return tile.unitState.canAct();
+    }else if(this.selectedTile && this.selectedAction){
       return this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState);
     }else{
       return true;

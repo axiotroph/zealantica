@@ -21,9 +21,8 @@ export default class Battle{
 
     this.activePlayer = Math.floor(Math.random() * 2);
     this.turnCount = 0;
-    this.nextTurn();
-    this.nextTurn();
-    this.nextTurn();
+
+    this.prepareForNextAction();
   }
 
   applyAction(event){
@@ -31,7 +30,11 @@ export default class Battle{
     event.detail.action.perform(event.detail.actor, event.detail.target);
 
     this.activationsRemaining--;
-    if(this.activationsRemaining <= 0){
+    this.prepareForNextAction();
+  }
+
+  prepareForNextAction(){
+    if(this.activeUnits().every((u) => !u.canAct()) || this.activationsRemaining <= 0){
       this.nextTurn();
     }
   }
@@ -40,11 +43,14 @@ export default class Battle{
     this.turnCount++;
     this.activePlayer = (this.activePlayer + 1) % 2;
 
-    Object.values(this.units).filter((u) => u.player == this.activePlayer)
-      .forEach((u) => u.ap += u.apRegen);
-
+    this.activeUnits().forEach((u) => u.ap += u.apRegen);
     this.activationsRemaining = 5;
 
     log.info("Starting turn " + this.turnCount);
+    this.prepareForNextAction();
+  }
+
+  activeUnits(){
+    return Object.values(this.units).filter((u) => u.player == this.activePlayer);
   }
 }
