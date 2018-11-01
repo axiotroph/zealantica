@@ -1,0 +1,17 @@
+Only think about battles for now
+
+Need to show:
+- units
+- interface for selecting actions
+- detail on selected/hovered unit
+- detail on selected/hovered ability
+- some sort of overall status state?
+    Current turn, activations remaining, network info...
+
+
+Plan:
+  Units in the center
+  Right pane is unitdetail/ability buttons/abilitydetail
+  left pane is turn status and other general interface concerns
+  terms can be explained by hovering
+    allow selection of inactive units for this purpose
