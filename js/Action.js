@@ -17,7 +17,15 @@ export default class Action {
     return this.targetRule(actor, target);
   }
 
-  perform(actor, target){
+  validate(actor, target, state){
+    if(!actor.canAct() || actor.player != state.activePlayer){
+      throw "Tried to apply illegal action";
+    }
+  }
+
+  perform(actor, target, state){
+    this.validate(actor, target, state);
+
     actor.ap -= this.apCost;
     log.info("Unit " + actor.id + " attacks unit " + target.id + " for 10 damage!");
     target.health = Math.max(0, target.health - 10);

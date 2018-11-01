@@ -27,7 +27,7 @@ export default class Battle{
 
   applyAction(event){
     log.trace("applying action " + JSON.stringify(event.detail));
-    event.detail.action.perform(event.detail.actor, event.detail.target);
+    event.detail.action.perform(event.detail.actor, event.detail.target, this);
 
     this.activationsRemaining--;
     this.prepareForNextAction();
