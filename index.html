@@ -5,7 +5,12 @@
   <title>Zealantica</title>
 </head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js"></script>
-  <script type="module" src="Main.js"></script>
+  <script>
+    if(typeof PIXI == 'undefined'){
+      document.write(unescape("%3Cscript src='pixi.min.js' type='text/javascript'%3E%3C/script%3E"));
+    }
+  </script>
+  <script type="module" src="js/Main.js"></script>
 <body>
   <div id="render"></div>
   <div id="log"></div>

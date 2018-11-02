@@ -1,0 +1,17 @@
+Planned inclusions:
+  Activations as a resource
+  AP as a resource
+    With diminishing returns (leads to sttacking steadily without being apparent to players)
+    With debt (ap is too complex to reason about if magic will be ready)
+  Magic
+    Primarily for utility/control/metamagic; magic as dps is rare but does exist
+    Gated by MP, which is magic-cooldown-points surfaced as a mechanic
+      MP can be possible to interact with, but very difficult to give MP to someone else
+      Individual spells could still hypothetically have a cooldown, but this can probably be avoided
+    Actives, passives, trigger-passives
+    Each spell has at least one numerical scaling value. It should matter, but an offset is acceptable.
+      That is, it's okay for a spell to be primarially useful for its flat effect, 
+      but int should still pay dividends if you're using that spell
+  Stun
+    For now, works as in original. This is necessary to give a strategic layer on top of 
+    attack patterns and a sense of sente. 

@@ -1,0 +1,8 @@
+graphics layout
+Tooltip pane
+
+Patterns
+Stun
+
+Stats
+Magic

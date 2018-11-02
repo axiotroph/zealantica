@@ -1,4 +1,5 @@
 import newUID from "./UID.js";
+import {basicAttack} from "./Action.js";
 
 import Log from "./Log.js";
 let log = Log("unit");
@@ -10,11 +11,13 @@ export default class Unit {
     this.y = y;
     this.health = 100;
     this.id = newUID();
+    this.ability = basicAttack;
+    this.ap = 0;
+    this.apRegen = 74;
   }
 
-  performAbility(other){
-    log.info("Unit " + this.id + " attacks unit " + other.id + " for 10 damage!");
-    other.health = Math.max(0, other.health - 10);
+  canAct(){
+    return this.ap > 100;
   }
 }
 
