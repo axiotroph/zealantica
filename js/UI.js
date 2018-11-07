@@ -24,6 +24,7 @@ export default class UI extends EventTarget{
     this.formations = {};
     this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
     this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
+
   }
 
   drawPanel(parent, panelDimensions, color){
@@ -116,17 +117,23 @@ class UnitTile {
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
     this.sprite = new PIXI.Sprite(texture);
 
-    let spriteDimensions = frame.units[unitState.player][unitState.x][unitState.y];
-    this.sprite.x = spriteDimensions.x;
-    this.sprite.y = spriteDimensions.y;
-    this.sprite.width = spriteDimensions.width;
-    this.sprite.height = spriteDimensions.height;
+    this.spriteDimensions = frame.units[unitState.player][unitState.x][unitState.y];
+    this.baseSpriteDimensions = {height: this.sprite.height, width: this.sprite.width};
+    this.sprite.x = this.spriteDimensions.x;
+    this.sprite.y = this.spriteDimensions.y;
+    this.sprite.width = this.spriteDimensions.width;
+    this.sprite.height = this.spriteDimensions.height;
+    ui.formations[unitState.player].addChild(this.sprite);
 
+    let yscale = (this.baseSpriteDimensions.height / this.spriteDimensions.height);
     this.healthBar = new PIXI.Graphics();
     this.healthBar.beginFill(healthColor);
-    this.healthBar.drawRect(0, spriteDimensions.height - frame.healthHeight, spriteDimensions.width, frame.healthHeight);
+    this.healthBar.drawRect(0, 0, this.spriteDimensions.width, yscale * frame.healthHeight);
     this.healthBar.endFill();
+		this.healthBar.x = 0;
+		this.healthBar.y = yscale * (this.spriteDimensions.height - frame.healthHeight);
     this.sprite.addChild(this.healthBar);
+
 
     this.hoverBorder = this.drawBorder(hoverBorderColor);
     this.selectBorder = this.drawBorder(selectBorderColor);
@@ -140,8 +147,8 @@ class UnitTile {
     this.ap.position.set(frame.apOffset, frame.apOffset);
     this.sprite.addChild(this.ap);
 
+
     this.update();
-    ui.formations[unitState.player].addChild(this.sprite);
   }
 
   drawBorder(color){
@@ -166,7 +173,7 @@ class UnitTile {
   }
 
   update(){
-    this.healthBar.width = frame.unitSideLength * (this.unitState.health / 100);
+    this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState.health / 100);
     this.ap.text = "" + this.unitState.ap;
   }
 }
