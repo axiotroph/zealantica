@@ -6,27 +6,33 @@ const hoverBorderColor = 0xAAAAAA;
 const selectBorderColor = 0x666666;
 const healthColor = 0x00FF00;
 
+const darkGrey = 0x222222;
+const medGrey = 0x333333;
+const lightGrey = 0x444444;
+
 export default class UI extends EventTarget{
 
   constructor(battle){
     super();
 
-    this.app = new PIXI.Application(frame.stageDimensions);
+    this.app = new PIXI.Application(frame.stage);
     document.getElementById("render").appendChild(this.app.view);
 
-    this.leftPanel = this.drawPanel(this.app.stage, frame.leftPanel, 0x222222);
-    this.rightPanel = this.drawPanel(this.app.stage, frame.rightPanel, 0x222222);
-    this.field = this.drawPanel(this.app.stage, frame.field, 0x333333);
+    this.leftPanel = this.drawPanel(this.app.stage, frame.leftPanel, darkGrey);
+    this.rightPanel = this.drawPanel(this.app.stage, frame.rightPanel, darkGrey);
+    this.field = this.drawPanel(this.app.stage, frame.field, medGrey);
     this.formations = {};
-    this.formations[0] = this.drawPanel(this.field, frame.formation0, 0x444444);
-    this.formations[1] = this.drawPanel(this.field, frame.formation1, 0x555555);
+    this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
+    this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
   }
 
   drawPanel(parent, panelDimensions, color){
     let result = new PIXI.Graphics();
     result.beginFill(color);
-    result.drawRect(panelDimensions.x, panelDimensions.y, panelDimensions.width, panelDimensions.height);
+    result.drawRect(0, 0, panelDimensions.width, panelDimensions.height);
     result.endFill();
+    result.x = panelDimensions.x;
+    result.y = panelDimensions.y;
     parent.addChild(result);
     return result;
   }
@@ -110,7 +116,7 @@ class UnitTile {
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
     this.sprite = new PIXI.Sprite(texture);
 
-    let spriteDimensions = frame.units[unitState.player][(unitState.x, unitState.y)];
+    let spriteDimensions = frame.units[unitState.player][unitState.x][unitState.y];
     this.sprite.x = spriteDimensions.x;
     this.sprite.y = spriteDimensions.y;
     this.sprite.width = spriteDimensions.width;

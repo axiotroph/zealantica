@@ -1,8 +1,8 @@
 let frame = {}
 
-frame.stage = {x: 0, y: 0, height: 800, width: 800};
+frame.stage = {x: 0, y: 0, height: window.innerHeight, width: window.innerWidth};
 
-const panelWidthRatio = 0.25;
+const panelWidthRatio = 0.4;
 let sidePanelWidth = Math.floor(frame.stage.width * panelWidthRatio * 0.5);
 frame.leftPanel = {x: 0, y: 0, height: frame.stage.height, width: sidePanelWidth};
 frame.field = {x: sidePanelWidth, y: 0, height: frame.stage.height, width: frame.stage.width-2*sidePanelWidth};
@@ -58,8 +58,6 @@ frame.units[1] = {};
       width: unitSideLength};
   });
 });
-
-    console.dir(frame.units);
 
 const unitIndicatorBarRatio = 0.2;
 const unitTextOffsetRatio = 0.1;
