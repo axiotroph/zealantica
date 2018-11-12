@@ -117,38 +117,36 @@ class UnitTile {
     let texture = PIXI.utils.TextureCache["assets/unit.png"];
     this.sprite = new PIXI.Sprite(texture);
 
-    this.spriteDimensions = frame.units[unitState.player][unitState.x][unitState.y];
+    this.targetDimensions = frame.units[unitState.player][unitState.x][unitState.y];
     this.baseSpriteDimensions = {height: this.sprite.height, width: this.sprite.width};
-    this.sprite.x = this.spriteDimensions.x;
-    this.sprite.y = this.spriteDimensions.y;
-    this.sprite.width = this.spriteDimensions.width;
-    this.sprite.height = this.spriteDimensions.height;
+    this.scalex = this.sprite.width;
+    this.scaley = this.sprite.height;
+    this.scaleyRatio = (this.scaley / this.targetDimensions.height);
+    this.scalexRatio = (this.scalex / this.targetDimensions.width);
+
     ui.formations[unitState.player].addChild(this.sprite);
 
-    let yscale = (this.baseSpriteDimensions.height / this.spriteDimensions.height);
     this.healthBar = new PIXI.Graphics();
     this.healthBar.beginFill(healthColor);
-    this.healthBar.drawRect(0, 0, this.spriteDimensions.width, yscale * frame.healthHeight);
+    this.healthBar.drawRect(0, 0, this.scalex, this.scaleyRatio * frame.healthHeight);
     this.healthBar.endFill();
 		this.healthBar.x = 0;
-		this.healthBar.y = yscale * (this.spriteDimensions.height - frame.healthHeight);
+		this.healthBar.y = this.scaleyRatio * (this.targetDimensions.height - frame.healthHeight);
     this.sprite.addChild(this.healthBar);
-
 
     this.hoverBorder = this.drawBorder(hoverBorderColor);
     this.selectBorder = this.drawBorder(selectBorderColor);
+
+    this.sprite.x = this.targetDimensions.x;
+    this.sprite.y = this.targetDimensions.y;
+    this.sprite.height = this.targetDimensions.height;
+    this.sprite.width = this.targetDimensions.width;
+    this.update();
 
     this.sprite.interactive = true;
     this.sprite.on('click', (e) => this.ui.unitSelect(this));
     this.sprite.on('mouseover', (e) => this.hoverBorder.visible = this.ui.isTileHoverable(this));
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
-
-    this.ap = new PIXI.Text("50");
-    this.ap.position.set(frame.apOffset, frame.apOffset);
-    this.sprite.addChild(this.ap);
-
-
-    this.update();
   }
 
   drawBorder(color){
@@ -174,6 +172,5 @@ class UnitTile {
 
   update(){
     this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState.health / 100);
-    this.ap.text = "" + this.unitState.ap;
   }
 }

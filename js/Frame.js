@@ -2,7 +2,7 @@ let frame = {}
 
 frame.stage = {x: 0, y: 0, height: window.innerHeight, width: window.innerWidth};
 
-const panelWidthRatio = 0.4;
+const panelWidthRatio = 0.7;
 let sidePanelWidth = Math.floor(frame.stage.width * panelWidthRatio * 0.5);
 frame.leftPanel = {x: 0, y: 0, height: frame.stage.height, width: sidePanelWidth};
 frame.field = {x: sidePanelWidth, y: 0, height: frame.stage.height, width: frame.stage.width-2*sidePanelWidth};
