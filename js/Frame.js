@@ -60,9 +60,9 @@ frame.units[1] = {};
 });
 
 const unitIndicatorBarRatio = 0.2;
-const unitTextOffsetRatio = 0.1;
+const unitBorderThicknessRatio = 0.075;
 
 frame.healthHeight = Math.floor(unitIndicatorBarRatio*unitSideLength);
-frame.apOffset = Math.floor(unitTextOffsetRatio*unitSideLength);
+frame.borderThickness = Math.floor(unitBorderThicknessRatio*unitSideLength);
 
 export default frame;

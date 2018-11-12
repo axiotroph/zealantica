@@ -13,7 +13,7 @@ export default class Battle{
     [0, 1].forEach((i) => {
       [0, 1, 2].forEach((x) => {
         [0, 1, 2].forEach((y) => {
-          let unit = new Unit(i, x, y);
+          let unit = new Unit(i, x, y, this);
           this.units[unit.id] = unit;
         });
       });     
@@ -26,7 +26,6 @@ export default class Battle{
   }
 
   applyAction(event){
-    log.trace("applying action " + JSON.stringify(event.detail));
     event.detail.action.perform(event.detail.actor, event.detail.target, this);
 
     this.activationsRemaining--;

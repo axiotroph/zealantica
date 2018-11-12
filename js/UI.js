@@ -2,8 +2,9 @@ import frame from "./Frame.js";
 import Log from "./Log.js";
 let log = Log("UI");
 
-const hoverBorderColor = 0xAAAAAA;
-const selectBorderColor = 0x666666;
+const hoverBorderColor = 0x6699ee;
+const selectBorderColor = 0x99ccff;
+const unitAvailableBorderColor = 0x3366bb;
 const healthColor = 0x00FF00;
 
 const darkGrey = 0x222222;
@@ -134,6 +135,7 @@ class UnitTile {
 		this.healthBar.y = this.scaleyRatio * (this.targetDimensions.height - frame.healthHeight);
     this.sprite.addChild(this.healthBar);
 
+    this.availableBorder = this.drawBorder(unitAvailableBorderColor);
     this.hoverBorder = this.drawBorder(hoverBorderColor);
     this.selectBorder = this.drawBorder(selectBorderColor);
 
@@ -154,7 +156,7 @@ class UnitTile {
 
     border.lineStyle(frame.borderThickness, color);
     let offset = frame.borderThickness/2;
-    border.drawRect(offset, offset, frame.unitSideLength - offset - 1, frame.unitSideLength - offset - 1);
+    border.drawRect(offset, offset, this.scalex - offset - 1, this.scaley - offset - 1);
 
     border.visible = false;
     this.sprite.addChild(border);
@@ -171,6 +173,7 @@ class UnitTile {
   }
 
   update(){
+    this.availableBorder.visible = this.unitState.canAct();
     this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState.health / 100);
   }
 }
