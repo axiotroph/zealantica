@@ -20,5 +20,10 @@ export default class Unit {
   canAct(){
     return this.ap > 100 && this.game.activePlayer == this.player;
   }
+
+  status(){
+    return "Swordydude!\n" + "Health: " + this.health
+      + "\nAP: " + this.ap;
+  }
 }
 

@@ -26,6 +26,14 @@ export default class UI extends EventTarget{
     this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
     this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
 
+    let style = new PIXI.TextStyle({
+      fill: "white"
+    });
+
+    this.leftText = new PIXI.Text("", style);
+    this.leftPanel.addChild(this.leftText);
+    this.rightText = new PIXI.Text("", style);
+    this.rightPanel.addChild(this.rightText);
   }
 
   drawPanel(parent, panelDimensions, color){
@@ -50,10 +58,18 @@ export default class UI extends EventTarget{
     Object.values(battle.units).forEach((x) => {
       this.unitTiles[x.id] = new UnitTile(this, x);
     });
+
+    this.update();
   }
 
   update(){
+    this.leftText.text = this.battle.status();
     Object.values(this.unitTiles).forEach((x) => x.update());
+  }
+
+  unitHover(tile){
+    this.rightText.text = tile.unitState.status();
+    this.hoverTarget = tile;
   }
 
   unitSelect(tile){
@@ -146,8 +162,14 @@ class UnitTile {
     this.update();
 
     this.sprite.interactive = true;
+
     this.sprite.on('click', (e) => this.ui.unitSelect(this));
-    this.sprite.on('mouseover', (e) => this.hoverBorder.visible = this.ui.isTileHoverable(this));
+
+    this.sprite.on('mouseover', (e) => {
+        this.hoverBorder.visible = this.ui.isTileHoverable(this);
+        this.ui.unitHover(this);
+    });
+
     this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
   }
 

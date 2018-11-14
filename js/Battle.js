@@ -52,4 +52,10 @@ export default class Battle{
   activeUnits(){
     return Object.values(this.units).filter((u) => u.player == this.activePlayer);
   }
+
+  status(){
+    return "Turn " + this.turnCount
+      + "\nActive Player: " + this.activePlayer
+      + "\nActivations: " + this.activationsRemaining;
+  }
 }
