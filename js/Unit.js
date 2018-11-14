@@ -18,7 +18,11 @@ export default class Unit {
   }
 
   canAct(){
-    return this.ap > 100 && this.game.activePlayer == this.player;
+    return this.ap > 100 && this.game.activePlayer == this.player && this.isAlive();
+  }
+
+  isAlive(){
+    return this.health > 0;
   }
 
   status(){
