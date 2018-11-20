@@ -1,12 +1,18 @@
-let logDiv = document.getElementById("log");
+let logData = [];
+
+export function logText(){
+  return logData.join("\n");
+}
 
 function write(writer, prefix, severity, content) {
   let str = '[' + prefix + '][' + writer.name + ']: ' + content;
   console.log(str);
 
   if(severity <= 3){
-    logDiv.innerHTML += "<br>";
-    logDiv.innerHTML += str;
+    logData.push(str);
+    while(logData.length > 20){
+      logData.shift();
+    }
   }
 }
 

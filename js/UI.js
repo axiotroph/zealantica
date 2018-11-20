@@ -1,5 +1,5 @@
 import frame from "./Frame.js";
-import Log from "./Log.js";
+import Log, {logText} from "./Log.js";
 let log = Log("UI");
 
 const hoverBorderColor = 0x6699ee;
@@ -27,7 +27,9 @@ export default class UI extends EventTarget{
     this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
 
     let style = new PIXI.TextStyle({
-      fill: "white"
+      fill: "white",
+      wordWrap: true,
+      wordWrapWidth: frame.leftPanel.width
     });
 
     this.leftText = new PIXI.Text("", style);
@@ -63,7 +65,7 @@ export default class UI extends EventTarget{
   }
 
   update(){
-    this.leftText.text = this.battle.status();
+    this.leftText.text = this.battle.status() + "\n\n" + logText();
     Object.values(this.unitTiles).forEach((x) => x.update());
   }
 
