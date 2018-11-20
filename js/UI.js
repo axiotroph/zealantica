@@ -50,7 +50,15 @@ export default class UI extends EventTarget{
   }
 
   load(callback){
-    PIXI.loader.add("assets/unit.png").load(callback);
+    PIXI.loader
+      .add("assets/sword.png")
+      .add("assets/spear.png")
+      .add("assets/axe.png")
+      .add("assets/bow.png")
+      .add("assets/rifle.png")
+      .add("assets/cannon.png")
+      .add("assets/staff.png")
+      .load(callback);
   }
 
   drawNewState(battle){
@@ -133,7 +141,7 @@ class UnitTile {
     this.ui = ui;
     this.unitState = unitState;
 
-    let texture = PIXI.utils.TextureCache["assets/unit.png"];
+    let texture = PIXI.utils.TextureCache["assets/sword.png"];
     this.sprite = new PIXI.Sprite(texture);
 
     this.targetDimensions = frame.units[unitState.player][unitState.x][unitState.y];
