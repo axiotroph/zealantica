@@ -1,5 +1,12 @@
+Log
+
+classes
+
 Patterns
 Stun
+
+player abstraction
+ai
 
 Stats
 Magic
