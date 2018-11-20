@@ -59,7 +59,7 @@ frame.units[1] = {};
   });
 });
 
-const unitIndicatorBarRatio = 0.2;
+const unitIndicatorBarRatio = 0.15;
 const unitBorderThicknessRatio = 0.075;
 
 frame.healthHeight = Math.floor(unitIndicatorBarRatio*unitSideLength);

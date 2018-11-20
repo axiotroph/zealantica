@@ -176,8 +176,8 @@ class UnitTile {
   drawBorder(color){
     let border = new PIXI.Graphics();
 
-    border.lineStyle(frame.borderThickness, color);
-    let offset = frame.borderThickness/2;
+    border.lineStyle(frame.borderThickness * this.scaleyRatio, color);
+    let offset = frame.borderThickness/2 * this.scaleyRatio;
     border.drawRect(offset, offset, this.scalex - offset - 1, this.scaley - offset - 1);
 
     border.visible = false;
