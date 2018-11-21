@@ -5,7 +5,8 @@ import Log from "./Log.js";
 let log = Log("unit");
 
 export default class Unit {
-  constructor(player, x, y, game) {
+  constructor(clazz, player, x, y, game) {
+    this.clazz = clazz;
     this.game = game;
     this.player = player;
     this.x = x;

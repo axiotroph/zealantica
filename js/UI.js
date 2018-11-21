@@ -141,7 +141,7 @@ class UnitTile {
     this.ui = ui;
     this.unitState = unitState;
 
-    let texture = PIXI.utils.TextureCache["assets/sword.png"];
+    let texture = PIXI.utils.TextureCache[unitState.clazz.texture];
     this.sprite = new PIXI.Sprite(texture);
 
     this.targetDimensions = frame.units[unitState.player][unitState.x][unitState.y];

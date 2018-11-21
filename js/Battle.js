@@ -1,4 +1,5 @@
 import Unit from "./Unit.js";
+import classes from "./Class.js";
 
 import Log from "./Log.js";
 let log = Log("battle");
@@ -13,7 +14,10 @@ export default class Battle{
     [0, 1].forEach((i) => {
       [0, 1, 2].forEach((x) => {
         [0, 1, 2].forEach((y) => {
-          let unit = new Unit(i, x, y, this);
+          let j = Math.floor(Math.random() * Object.keys(classes).length);
+          let clazz = classes[Object.keys(classes)[j]];
+          let unit = new Unit(clazz, i, x, y, this);
+          console.dir(unit);
           this.units[unit.id] = unit;
         });
       });     
