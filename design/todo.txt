@@ -1,5 +1,3 @@
-classes
-
 Patterns
 Stun
 
