@@ -27,7 +27,7 @@ export default class Unit {
   }
 
   status(){
-    return "Swordydude!\n" + "Health: " + this.health
+    return this.clazz.name + "\n" + "Health: " + this.health
       + "\nAP: " + this.ap;
   }
 }
