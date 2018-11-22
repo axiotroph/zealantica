@@ -16,7 +16,7 @@ export default class Action {
   }
 
   willAffect(target, secondTarget){
-    return this.patternSpec(target, secondTarget);
+    return this.patternSpec(target, secondTarget) > 0 && target.player == secondTarget.player;
   }
 
   validate(actor, target, state){
@@ -34,7 +34,7 @@ export default class Action {
     for(let key in state.units){
       let unit = state.units[key];
       let magnitude = this.patternSpec(target, unit);
-      if(unit.player == target.player && magnitude > 0){
+      if(this.willAffect(target, unit)){
         this.unitPerform(actor, unit, state, magnitude);
       }
     };

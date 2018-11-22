@@ -75,11 +75,48 @@ export default class UI extends EventTarget{
   update(){
     this.leftText.text = this.battle.status() + "\n\n" + logText();
     Object.values(this.unitTiles).forEach((x) => x.update());
+    this.updateHover();
+  }
+
+  updateHover(){
+    self = this;
+
+    if(!this.hoverTarget){
+      this.rightText.text = "";
+    }else{
+      this.rightText.text = this.hoverTarget.unitState.status();
+    }
+
+    if(this.state == "actorSelect"){
+      var pred = function(tile){tile.unitState.canAct()};
+    }else if(this.state == "targetSelect" && this.hoverTarget){
+      var pred = function(tile){
+        return self.selectedAction.canTarget(self.selectedTile.unitState, self.hoverTarget.unitState)
+          && self.selectedAction.willAffect(self.hoverTarget.unitState, tile.unitState);
+      }
+    }else{
+      var pred = function(){return false;};
+    }
+
+    for(var key in this.unitTiles){
+      let tile = this.unitTiles[key];
+      tile.showIndicatorBorder(pred(tile));
+    }
+
   }
 
   unitHover(tile){
-    this.rightText.text = tile.unitState.status();
-    this.hoverTarget = tile;
+    if(this.hoverTarget != tile){
+      this.hoverTarget = tile;
+      this.updateHover();
+    }
+  }
+
+  unitUnHover(tile){
+    if(this.hoverTarget == tile){
+      this.hoverTarget = null;
+      this.updateHover();
+    }
   }
 
   unitSelect(tile){
@@ -110,12 +147,12 @@ export default class UI extends EventTarget{
   select(tile){
     this.selectedTile = tile;
     this.selectedAction = tile.unitState.abilities[0];
-    tile.select();
+    tile.showSelectBorder(true);
   }
 
   clearSelect(){
     if(this.selectedTile){
-      this.selectedTile.deselect();
+      this.selectedTile.showSelectBorder(false);
     }
     this.selectedTile = null;
   }
@@ -178,11 +215,12 @@ class UnitTile {
     this.sprite.on('click', (e) => this.ui.unitSelect(this));
 
     this.sprite.on('mouseover', (e) => {
-        this.hoverBorder.visible = this.ui.isTileHoverable(this);
         this.ui.unitHover(this);
     });
 
-    this.sprite.on('mouseout', (e) => this.hoverBorder.visible = false);
+    this.sprite.on('mouseout', (e) => {
+        this.ui.unitUnHover(this);
+    });
   }
 
   drawBorder(color){
@@ -198,12 +236,12 @@ class UnitTile {
     return border;
   }
 
-  select(){
-    this.selectBorder.visible = true;
+  showSelectBorder(bool){
+    this.selectBorder.visible = bool;
   }
 
-  deselect(){
-    this.selectBorder.visible = false;
+  showIndicatorBorder(bool){
+    this.hoverBorder.visible = bool;
   }
 
   update(){

@@ -37,7 +37,6 @@ const patternSpecs = {
 
   "cannon" : function(primaryTarget, thisTarget){
     let manhattanDistance = Math.abs(primaryTarget.x - thisTarget.x) + Math.abs(primaryTarget.y - thisTarget.y);
-    console.dir(primaryTarget, thisTarget, manhattanDistance);
     if(manhattanDistance == 0){
       return 0.5;
     }else if(manhattanDistance == 1){
