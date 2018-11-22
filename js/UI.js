@@ -55,7 +55,7 @@ export default class UI extends EventTarget{
       .add("assets/spear.png")
       .add("assets/axe.png")
       .add("assets/bow.png")
-      .add("assets/rifle.png")
+      .add("assets/gun.png")
       .add("assets/cannon.png")
       .add("assets/staff.png")
       .load(callback);
@@ -101,13 +101,15 @@ export default class UI extends EventTarget{
 
         this.clearSelect();
         this.dispatchEvent(new CustomEvent("actionReady", {'detail': data}));
+      }else{
+        log.trace("ignoring click because !canTarget()");
       }
     }
   }
 
   select(tile){
     this.selectedTile = tile;
-    this.selectedAction = tile.unitState.ability;
+    this.selectedAction = tile.unitState.abilities[0];
     tile.select();
   }
 

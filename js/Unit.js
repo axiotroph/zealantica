@@ -1,5 +1,4 @@
 import newUID from "./UID.js";
-import {basicAttack} from "./Action.js";
 
 import Log from "./Log.js";
 let log = Log("unit");
@@ -11,9 +10,9 @@ export default class Unit {
     this.player = player;
     this.x = x;
     this.y = y;
-    this.health = 100;
+    this.health = this.stats().maxHealth;
     this.id = newUID();
-    this.ability = basicAttack;
+    this.abilities = [this.clazz.basicAttack];
     this.ap = 0;
     this.apRegen = 74;
   }
@@ -27,8 +26,21 @@ export default class Unit {
   }
 
   status(){
-    return this.clazz.name + "\n" + "Health: " + this.health
+    return this.name() + "\n" + "Health: " + this.health
       + "\nAP: " + this.ap;
+  }
+
+  name(){
+    return this.clazz.name + "[" + this.id + "]";
+  }
+
+  stats(){
+    return {
+      health: this.health,
+      maxHealth: this.clazz.maxHealth,
+      attack: this.clazz.attack,
+      defense: this.clazz.defense,
+    }
   }
 }
 

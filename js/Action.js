@@ -1,24 +1,26 @@
 import newUID from "./UID.js";
 
-import Log from "./Log.js";
-let log = Log("action");
-
 export const actions = {};
 
 export default class Action {
-  constructor(targetRule) {
-    this.targetRule = targetRule;
+  constructor(targetSpec, patternSpec) {
+    this.targetSpec = targetSpec;
+    this.patternSpec = patternSpec;
     this.id = newUID();
     this.apCost = 100;
     actions[this.id] = this;
   }
 
-  canTarget(actor, target){
-    return this.targetRule(actor, target);
+  canTarget(actor, target, state){
+    return this.targetSpec(actor, target, state);
+  }
+
+  willAffect(target, secondTarget){
+    return this.patternSpec(target, secondTarget);
   }
 
   validate(actor, target, state){
-    if(!actor.canAct() || actor.player != state.activePlayer){
+    if(!actor.canAct() || actor.player != state.activePlayer || !this.canTarget(actor, target, state)){
       throw "Tried to apply illegal action";
     }
   }
@@ -26,18 +28,19 @@ export default class Action {
   perform(actor, target, state){
     this.validate(actor, target, state);
 
+    state.activationsRemaining--;
     actor.ap -= this.apCost;
-    log.info("Unit " + actor.id + " attacks unit " + target.id + " for 10 damage!");
-    target.health = Math.max(0, target.health - 10);
+
+    for(let key in state.units){
+      let unit = state.units[key];
+      let magnitude = this.patternSpec(target, unit);
+      if(unit.player == target.player && magnitude > 0){
+        this.unitPerform(actor, unit, state, magnitude);
+      }
+    };
+  }
+
+  unitPerform(actor, thisTarget, state, magnitude){
+    throw "abstract method";
   }
 }
-
-export function targetsEnemies(actor, target){
-  return actor.player != target.player;
-}
-
-export function targetsAllies(actor, target){
-  return actor.player == target.player;
-}
-
-export const basicAttack = new Action(targetsEnemies);

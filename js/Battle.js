@@ -17,7 +17,6 @@ export default class Battle{
           let j = Math.floor(Math.random() * Object.keys(classes).length);
           let clazz = classes[Object.keys(classes)[j]];
           let unit = new Unit(clazz, i, x, y, this);
-          console.dir(unit);
           this.units[unit.id] = unit;
         });
       });     
@@ -31,8 +30,6 @@ export default class Battle{
 
   applyAction(event){
     event.detail.action.perform(event.detail.actor, event.detail.target, this);
-
-    this.activationsRemaining--;
     this.prepareForNextAction();
   }
 
