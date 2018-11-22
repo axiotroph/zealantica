@@ -88,7 +88,7 @@ export default class UI extends EventTarget{
     }
 
     if(this.state == "actorSelect"){
-      var pred = function(tile){tile.unitState.canAct()};
+      var pred = function(tile){return tile.unitState.canAct() && tile == self.hoverTarget};
     }else if(this.state == "targetSelect" && this.hoverTarget){
       var pred = function(tile){
         return self.selectedAction.canTarget(self.selectedTile.unitState, self.hoverTarget.unitState)
