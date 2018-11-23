@@ -1,9 +1,6 @@
-Stun
-
 player abstraction
 ai
-
 Stats
+ui improvements
 Magic
-
 randomness
