@@ -43,7 +43,7 @@ export default class Battle{
     this.turnCount++;
     this.activePlayer = (this.activePlayer + 1) % 2;
 
-    this.activeUnits().forEach((u) => u.ap += u.apRegen);
+    this.activeUnits().forEach((u) => u.nextTurn());
     this.activationsRemaining = 5;
 
     log.info("Starting turn " + this.turnCount);
