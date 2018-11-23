@@ -91,7 +91,7 @@ export default class UI extends EventTarget{
       var pred = function(tile){return tile.unitState.canAct() && tile == self.hoverTarget};
     }else if(this.state == "targetSelect" && this.hoverTarget){
       var pred = function(tile){
-        return self.selectedAction.canTarget(self.selectedTile.unitState, self.hoverTarget.unitState)
+        return self.selectedAction.canTarget(self.selectedTile.unitState, self.hoverTarget.unitState, self.battle)
           && self.selectedAction.willAffect(self.hoverTarget.unitState, tile.unitState);
       }
     }else{
@@ -125,7 +125,7 @@ export default class UI extends EventTarget{
       this.state = "targetSelect";
       log.trace("actor is " + tile.unitState.id);
     }else if(this.state === "targetSelect"){
-      if(this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState)){
+      if(this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState, this.battle)){
         this.selectedTargetTile = tile;
         log.trace("target is " + tile.unitState.id);
 
@@ -155,16 +155,6 @@ export default class UI extends EventTarget{
       this.selectedTile.showSelectBorder(false);
     }
     this.selectedTile = null;
-  }
-
-  isTileHoverable(tile){
-    if(this.state == "actorSelect"){
-      return tile.unitState.canAct();
-    }else if(this.selectedTile && this.selectedAction){
-      return this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState);
-    }else{
-      return true;
-    }
   }
 
   listenForTurn(){

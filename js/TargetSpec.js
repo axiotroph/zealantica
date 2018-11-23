@@ -4,15 +4,22 @@ const targetSpecs = {
   },
 
   "enemy" : function(actor, target, game){
-    return actor.player != target.player;
+    return actor.player != target.player && target.isAlive();
   },
 
   "ally" : function(actor, target, game){
-    return actor.player == target.player;
+    return actor.player == target.player && target.isAlive();
   },
 
   "front" : function(actor, target, game){
-    return target.y == 2;
+    let walk = 2;
+    while(walk != target.y){
+      if(game.unitByPosition(target.x, walk).isAlive()){
+        return false;
+      }
+      walk--;
+    }
+    return true;
   },
 
   "and" : function(f, g){
