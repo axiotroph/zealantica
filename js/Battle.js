@@ -66,6 +66,26 @@ export default class Battle{
     return Object.values(this.units).filter((u) => u.player == this.activePlayer);
   }
 
+  playerDead(player){
+    return Object.values(this.units).every((u) => u.player != player || !u.isAlive());
+  }
+
+  finished(){
+    return this.playerDead(0) || this.playerDead(1);
+  }
+
+  victor(){
+    if(this.playerDead(0) && this.playerDead(1)){
+      return "tie";
+    }
+    if(this.playerDead(1)){
+      return 0;
+    }
+    if(this.playerDead(0)){
+      return 1;
+    }
+  }
+
   status(){
     return "Turn " + this.turnCount
       + "\nActive Player: " + this.activePlayer

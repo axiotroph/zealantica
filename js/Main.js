@@ -1,27 +1,22 @@
-import UI from "./UI.js";
+import UI from "./ui/UI.js";
 import Battle from "./Battle.js";
+import BattleRunner from "./BattleRunner.js";
 
 import Log from "./Log.js";
 let log = Log("main");
 
 class Zealantica {
   go() {
-    this.battle = new Battle();
-    this.ui = new UI();
+    let battle = new Battle();
+    let ui = new UI();
+    let runner = new BattleRunner(battle, {0: ui, 1: ui}, ui);
 
-    this.players = {
-      0: this.ui,
-      1: this.ui
-    }
-
-    this.ui.load(this.battle).then(this.doBattle.bind(this)).catch(err => {log.fatal("uncaught error"); console.dir(err);});
-  }
-
-  doBattle(){
-    return this.players[this.battle.activePlayer].getTurn().then(turn => {
-      this.battle.applyAction(turn);
-      this.ui.update();
-    }).then(this.doBattle.bind(this));
+    runner.run().then(
+      victor => log.info("Battle victor is " + victor),
+      err => {
+        log.fatal("Unhandled error");
+        console.dir(err);
+      });
   }
 }
 

@@ -1,0 +1,30 @@
+import UI from "./ui/UI.js";
+import Battle from "./Battle.js";
+
+export default class BattleRunner{
+  constructor(battle, players, ui){
+    this.battle = battle;
+    this.players = players;
+    this.ui = ui;
+  }
+
+  run(){
+    let load = (this.ui == undefined) ? Promise.resolve() : this.ui.load(this.battle);
+
+    return load.then(this.runStep.bind(this));
+  }
+
+  runStep(){
+    if(this.battle.finished()){
+      return this.battle.victor();
+    }else{
+      let turn = this.players[this.battle.activePlayer].getTurn();
+      return turn.then(t => {
+        this.battle.applyAction(t);
+        if(this.ui != undefined){
+          this.ui.update();
+        }
+      }).then(this.runStep.bind(this));
+    }
+  }
+}

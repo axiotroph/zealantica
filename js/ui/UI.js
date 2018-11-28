@@ -1,6 +1,6 @@
 import frame from "./Frame.js";
-import Player from "./Player.js";
-import Log, {logText} from "./Log.js";
+import Player from "../Player.js";
+import Log, {logText} from "../Log.js";
 let log = Log("UI");
 
 const hoverBorderColor = 0x6699ee;
