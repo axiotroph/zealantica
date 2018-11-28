@@ -1,0 +1,8 @@
+What classes?
+What is the design of classes?
+  Are they stratified?
+  How specialized are they?
+  How much can a unit differ from a class?
+  How are they limited? (no triple excorcist, but yes double monk?)
+
+How does progression work?
