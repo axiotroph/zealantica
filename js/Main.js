@@ -1,4 +1,5 @@
 import UI from "./ui/UI.js";
+import Ai from "./ai/Ai.js";
 import Battle from "./Battle.js";
 import BattleRunner from "./BattleRunner.js";
 
@@ -9,7 +10,8 @@ class Zealantica {
   go() {
     let battle = new Battle();
     let ui = new UI();
-    let runner = new BattleRunner(battle, {0: ui, 1: ui}, ui);
+    let ai = new Ai(0, battle, null, null);
+    let runner = new BattleRunner(battle, {0: ai, 1: ui}, ui);
 
     runner.run().then(
       victor => log.info("Battle victor is " + victor),
