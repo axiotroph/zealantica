@@ -32,11 +32,7 @@ export default class Battle{
   }
 
   unitByPosition(x, y){
-    a++;
-    console.log('a', a);
     for(var key in this.units){
-      b++
-      console.log('b', b);
       if(this.units[key].x == x && this.units[key].y == y){
         return this.units[key];
       }

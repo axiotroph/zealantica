@@ -7,9 +7,9 @@ let log = Log("main");
 class Zealantica {
   go() {
     this.battle = new Battle();
-    this.ui = new UI(this.battle);
+    this.ui = new UI();
 
-    this.ui.load().then(this.doBattle.bind(this)).catch(err => {log.fatal("uncaught error"); console.dir(err);});
+    this.ui.load(this.battle).then(this.doBattle.bind(this)).catch(err => {log.fatal("uncaught error"); console.dir(err);});
   }
 
   doBattle(){

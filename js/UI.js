@@ -12,40 +12,19 @@ const darkGrey = 0x222222;
 const medGrey = 0x333333;
 const lightGrey = 0x444444;
 
+let pixiLoad = new Promise(resolve => {
+  PIXI.loader
+    .add("assets/sword.png")
+    .add("assets/spear.png")
+    .add("assets/axe.png")
+    .add("assets/bow.png")
+    .add("assets/gun.png")
+    .add("assets/cannon.png")
+    .add("assets/staff.png")
+    .load(resolve);
+});
+
 export default class UIPlayer extends Player{
-
-  constructor(battle){
-    super();
-
-    this.app = new PIXI.Application(frame.stage);
-    document.getElementById("render").appendChild(this.app.view);
-
-    this.leftPanel = this.drawPanel(this.app.stage, frame.leftPanel, darkGrey);
-    this.rightPanel = this.drawPanel(this.app.stage, frame.rightPanel, darkGrey);
-    this.field = this.drawPanel(this.app.stage, frame.field, medGrey);
-    this.formations = {};
-    this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
-    this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
-
-    let style = new PIXI.TextStyle({
-      fill: "white",
-      wordWrap: true,
-      wordWrapWidth: frame.leftPanel.width
-    });
-
-    this.leftText = new PIXI.Text("", style);
-    this.leftPanel.addChild(this.leftText);
-    this.rightText = new PIXI.Text("", style);
-    this.rightPanel.addChild(this.rightText);
-    this.battle = battle;
-    this.unitTiles = {};
-
-    Object.values(battle.units).forEach((x) => {
-      this.unitTiles[x.id] = new UnitTile(this, x);
-    });
-
-    this.update();
-  }
 
   drawPanel(parent, panelDimensions, color){
     let result = new PIXI.Graphics();
@@ -58,18 +37,36 @@ export default class UIPlayer extends Player{
     return result;
   }
 
-  load(callback){
-    log.info("Loading...");
-    return new Promise(resolve => {
-      PIXI.loader
-        .add("assets/sword.png")
-        .add("assets/spear.png")
-        .add("assets/axe.png")
-        .add("assets/bow.png")
-        .add("assets/gun.png")
-        .add("assets/cannon.png")
-        .add("assets/staff.png")
-        .load(resolve);
+  load(battle){
+    return pixiLoad.then(() => {
+      this.app = new PIXI.Application(frame.stage);
+      document.getElementById("render").appendChild(this.app.view);
+
+      this.leftPanel = this.drawPanel(this.app.stage, frame.leftPanel, darkGrey);
+      this.rightPanel = this.drawPanel(this.app.stage, frame.rightPanel, darkGrey);
+      this.field = this.drawPanel(this.app.stage, frame.field, medGrey);
+      this.formations = {};
+      this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
+      this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
+
+      let style = new PIXI.TextStyle({
+        fill: "white",
+        wordWrap: true,
+        wordWrapWidth: frame.leftPanel.width
+      });
+
+      this.leftText = new PIXI.Text("", style);
+      this.leftPanel.addChild(this.leftText);
+      this.rightText = new PIXI.Text("", style);
+      this.rightPanel.addChild(this.rightText);
+      this.battle = battle;
+      this.unitTiles = {};
+
+      Object.values(battle.units).forEach((x) => {
+        this.unitTiles[x.id] = new UnitTile(this, x);
+      });
+
+      this.update();
     });
   }
 
