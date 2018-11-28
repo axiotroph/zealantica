@@ -1,4 +1,3 @@
-player abstraction
 ai
 Stats
 ui improvements
