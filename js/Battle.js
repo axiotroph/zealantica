@@ -44,8 +44,8 @@ export default class Battle{
     throw "no unit at this position: " + x + ", " + y;
   }
 
-  applyAction(event){
-    event.detail.action.perform(event.detail.actor, event.detail.target, this);
+  applyAction(turn){
+    turn.action.perform(turn.actor, turn.target, this);
     this.prepareForNextAction();
   }
 

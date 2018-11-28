@@ -1,5 +1,3 @@
-export default class Player
-
 export default class Player{
   getTurn(){
     throw "abstract method";
@@ -9,4 +7,3 @@ export default class Player{
     throw "abstract method";
   }
 }
-

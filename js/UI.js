@@ -70,7 +70,7 @@ export default class UIPlayer extends Player{
         .add("assets/cannon.png")
         .add("assets/staff.png")
         .load(resolve);
-    }
+    });
   }
 
   update(){
@@ -114,48 +114,50 @@ export default class UIPlayer extends Player{
 
   getTurn(){
     log.trace("waiting for turn imput");
-    return this.getActor().then(this.getAction).then(this.getTarget);
+    return this.getActor().then(this.getAction.bind(this)).then(this.getTarget.bind(this));
   }
 
   getActor(){
-    pending = true;
+    let pending = true;
     return new Promise((resolve, reject) => {
       this.highlightOnHover = (hoverTile, highlightTile) => {
         return pending && hoverTile == highlightTile && hoverTile.unitState.canAct();
-      }
+      };
 
       this.onTileClick = tile => {
-        if(pending && tile.unitState.player = this.battle.activePlayer && tile.unitState.canAct()){
+        if(pending && tile.unitState.player == this.battle.activePlayer && tile.unitState.canAct()){
           pending = false;
           tile.showSelectBorder(true);
           resolve({'actor': tile.unitState, 'actorTile': tile});
         }
-      }
-    }
+      };
+    });
   }
 
   getAction(turnData){
-    actionData.action = actionData.actor.abilities[0];
+    turnData.action = turnData.actor.abilities[0];
     return Promise.resolve(turnData);
   }
 
   getTarget(turnData){
-    pending = true;
-    return new Promise(resolve, reject) => {
+    let pending = true;
+    return new Promise((resolve, reject) => {
       this.highlightOnHover = (hoverTile, highlightTile) => {
-        return pending && turnData.canTarget(turnData.actor, hoverTile.unitState, this.battle) 
+        return pending 
+          && hoverTile != null 
+          && turnData.action.canTarget(turnData.actor, hoverTile.unitState, this.battle) 
           && turnData.action.willAffect(hoverTile.unitState, highlightTile.unitState);
-      }
+      };
 
       this.onTileClick = tile => {
-        if(pending && turnData.canTarget(turnData.actor, tile.unitState, this.battle)){
+        if(pending && turnData.action.canTarget(turnData.actor, tile.unitState, this.battle)){
           pending = false;
           turnData.target = tile.unitState;
           turnData.actorTile.showSelectBorder(false);
           resolve(turnData);
         }
-      }
-    }
+      };
+    });
   }
 }
 
@@ -197,7 +199,7 @@ class UnitTile {
 
     this.sprite.interactive = true;
 
-    this.sprite.on('click', (e) => this.ui.unitSelect(this));
+    this.sprite.on('click', (e) => this.ui.onTileClick(this));
 
     this.sprite.on('mouseover', (e) => {
         this.ui.unitHover(this);
