@@ -1,4 +1,5 @@
 import frame from "./Frame.js";
+import Player from "./Player.js";
 import Log, {logText} from "./Log.js";
 let log = Log("UI");
 
@@ -11,7 +12,7 @@ const darkGrey = 0x222222;
 const medGrey = 0x333333;
 const lightGrey = 0x444444;
 
-export default class UI extends EventTarget{
+export default class UIPlayer extends Player{
 
   constructor(battle){
     super();
@@ -36,6 +37,14 @@ export default class UI extends EventTarget{
     this.leftPanel.addChild(this.leftText);
     this.rightText = new PIXI.Text("", style);
     this.rightPanel.addChild(this.rightText);
+    this.battle = battle;
+    this.unitTiles = {};
+
+    Object.values(battle.units).forEach((x) => {
+      this.unitTiles[x.id] = new UnitTile(this, x);
+    });
+
+    this.update();
   }
 
   drawPanel(parent, panelDimensions, color){
@@ -50,26 +59,18 @@ export default class UI extends EventTarget{
   }
 
   load(callback){
-    PIXI.loader
-      .add("assets/sword.png")
-      .add("assets/spear.png")
-      .add("assets/axe.png")
-      .add("assets/bow.png")
-      .add("assets/gun.png")
-      .add("assets/cannon.png")
-      .add("assets/staff.png")
-      .load(callback);
-  }
-
-  drawNewState(battle){
-    this.battle = battle;
-    this.unitTiles = {};
-
-    Object.values(battle.units).forEach((x) => {
-      this.unitTiles[x.id] = new UnitTile(this, x);
-    });
-
-    this.update();
+    log.info("Loading...");
+    return new Promise(resolve => {
+      PIXI.loader
+        .add("assets/sword.png")
+        .add("assets/spear.png")
+        .add("assets/axe.png")
+        .add("assets/bow.png")
+        .add("assets/gun.png")
+        .add("assets/cannon.png")
+        .add("assets/staff.png")
+        .load(resolve);
+    }
   }
 
   update(){
@@ -87,20 +88,9 @@ export default class UI extends EventTarget{
       this.rightText.text = this.hoverTarget.unitState.status();
     }
 
-    if(this.state == "actorSelect"){
-      var pred = function(tile){return tile.unitState.canAct() && tile == self.hoverTarget};
-    }else if(this.state == "targetSelect" && this.hoverTarget){
-      var pred = function(tile){
-        return self.selectedAction.canTarget(self.selectedTile.unitState, self.hoverTarget.unitState, self.battle)
-          && self.selectedAction.willAffect(self.hoverTarget.unitState, tile.unitState);
-      }
-    }else{
-      var pred = function(){return false;};
-    }
-
     for(var key in this.unitTiles){
       let tile = this.unitTiles[key];
-      tile.showIndicatorBorder(pred(tile));
+      tile.showIndicatorBorder(this.highlightOnHover(this.hoverTarget, tile));
     }
 
   }
@@ -119,48 +109,53 @@ export default class UI extends EventTarget{
     }
   }
 
-  unitSelect(tile){
-    if(this.state === "actorSelect" && tile.unitState.player == this.battle.activePlayer && tile.unitState.canAct()){
-      this.select(tile);
-      this.state = "targetSelect";
-      log.trace("actor is " + tile.unitState.id);
-    }else if(this.state === "targetSelect"){
-      if(this.selectedAction.canTarget(this.selectedTile.unitState, tile.unitState, this.battle)){
-        this.selectedTargetTile = tile;
-        log.trace("target is " + tile.unitState.id);
+  onTileClick(){}
+  highlightOnHover(){return false;}
 
-        this.state = "idle";
-        let data = {
-          "actor": this.selectedTile.unitState,
-          "action": this.selectedAction,
-          "target": this.selectedTargetTile.unitState
-        };
+  getTurn(){
+    log.trace("waiting for turn imput");
+    return this.getActor().then(this.getAction).then(this.getTarget);
+  }
 
-        this.clearSelect();
-        this.dispatchEvent(new CustomEvent("actionReady", {'detail': data}));
-      }else{
-        log.trace("ignoring click because !canTarget()");
+  getActor(){
+    pending = true;
+    return new Promise((resolve, reject) => {
+      this.highlightOnHover = (hoverTile, highlightTile) => {
+        return pending && hoverTile == highlightTile && hoverTile.unitState.canAct();
+      }
+
+      this.onTileClick = tile => {
+        if(pending && tile.unitState.player = this.battle.activePlayer && tile.unitState.canAct()){
+          pending = false;
+          tile.showSelectBorder(true);
+          resolve({'actor': tile.unitState, 'actorTile': tile});
+        }
       }
     }
   }
 
-  select(tile){
-    this.selectedTile = tile;
-    this.selectedAction = tile.unitState.abilities[0];
-    tile.showSelectBorder(true);
+  getAction(turnData){
+    actionData.action = actionData.actor.abilities[0];
+    return Promise.resolve(turnData);
   }
 
-  clearSelect(){
-    if(this.selectedTile){
-      this.selectedTile.showSelectBorder(false);
+  getTarget(turnData){
+    pending = true;
+    return new Promise(resolve, reject) => {
+      this.highlightOnHover = (hoverTile, highlightTile) => {
+        return pending && turnData.canTarget(turnData.actor, hoverTile.unitState, this.battle) 
+          && turnData.action.willAffect(hoverTile.unitState, highlightTile.unitState);
+      }
+
+      this.onTileClick = tile => {
+        if(pending && turnData.canTarget(turnData.actor, tile.unitState, this.battle)){
+          pending = false;
+          turnData.target = tile.unitState;
+          turnData.actorTile.showSelectBorder(false);
+          resolve(turnData);
+        }
+      }
     }
-    this.selectedTile = null;
-  }
-
-  listenForTurn(){
-    this.clearSelect();
-    this.state = "actorSelect";
-    log.trace("waiting for turn input");
   }
 }
 

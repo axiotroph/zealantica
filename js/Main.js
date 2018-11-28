@@ -6,30 +6,18 @@ let log = Log("main");
 
 class Zealantica {
   go() {
-    this.preload();
-    this.ui.load(() => this.postload());
-  }
-
-  preload() {
-    log.info("Loading...");
-    this.ui = new UI();
-  }
-
-  postload() {
     this.battle = new Battle();
+    this.ui = new UI(battle);
 
-    this.ui.drawNewState(this.battle);
-
-    this.ui.addEventListener('actionReady', this.turnReady.bind(this));
-    this.ui.listenForTurn();
-
-    log.info("Running");
+    this.ui.load().then(this.doBattle).catch(err => log.fatal("uncaught error " + err));
   }
 
-  turnReady(details){
-    this.battle.applyAction(details);
-    this.ui.update();
-    this.ui.listenForTurn();
+  doBattle(){
+    return this.ui.getTurn().then(turn => {
+      this.battle.applyAction(turn);
+      this.ui.update();)
+    .then(this.doBattle);
+    }
   }
 }
 
