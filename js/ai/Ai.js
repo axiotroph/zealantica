@@ -16,8 +16,10 @@ export default class Ai{
   }
 
   getTurn(){
+    let delay = new Promise(resolve => setTimeout(resolve, 5));
     let moves = this.enumerateMoves(this.battle);
-    return Promise.resolve(moves[0]);
+    log.error(moves.length);
+    return delay.then(() => Promise.resolve(moves[0]));
   }
 
   enumerateMoves(battle){

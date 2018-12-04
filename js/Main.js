@@ -10,8 +10,9 @@ class Zealantica {
   go() {
     let battle = new Battle();
     let ui = new UI();
-    let ai = new Ai(0, battle, null, null);
-    let runner = new BattleRunner(battle, {0: ai, 1: ui}, ui);
+    let ai1 = new Ai(0, battle, null, null);
+    let ai2 = new Ai(1, battle, null, null);
+    let runner = new BattleRunner(battle, {0: ai1, 1: ai2}, ui);
 
     runner.run().then(
       victor => log.info("Battle victor is " + victor),
