@@ -14,7 +14,7 @@ const targetSpecs = {
   "front" : function(actor, target, game){
     let walk = 2;
     while(walk != target.y){
-      if(game.unitByPosition(target.x, walk).isAlive()){
+      if(game.unitByPosition(target.x, walk, target.player).isAlive()){
         return false;
       }
       walk--;

@@ -31,9 +31,9 @@ export default class Battle{
     this.prepareForNextAction();
   }
 
-  unitByPosition(x, y){
+  unitByPosition(x, y, owner){
     for(var key in this.units){
-      if(this.units[key].x == x && this.units[key].y == y){
+      if(this.units[key].x == x && this.units[key].y == y && this.units[key].player == owner){
         return this.units[key];
       }
     }

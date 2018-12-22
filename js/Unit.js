@@ -80,7 +80,7 @@ export default class Unit {
     if(this.stunCounter > 0){
       result += ("\nCombo: " + this.stunCounter);
     }
-    return result;
+    return result + this.debugInfo();
   }
 
   name(){
@@ -94,6 +94,14 @@ export default class Unit {
       attack: this.clazz.attack,
       defense: this.clazz.defense,
     }
+  }
+
+  debugInfo(){
+    return "\nDEBUG--"
+      + "\nID: " + this.id
+      + "\nx: " + this.x
+      + "\ny: " + this.y
+      ;
   }
 }
 

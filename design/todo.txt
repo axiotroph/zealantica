@@ -3,3 +3,5 @@ Stats
 ui improvements
 Magic
 randomness
+Sequencing battles
+Progression
