@@ -1,9 +1,14 @@
 import Player from "../Player.js";
+import heuristic from "HeuristicEvaluator.js"
 
 import Log from "../Log.js";
 let log = Log("ai");
 
-export default class Ai{
+export default function ai(player, battle){
+  return new Ai(player, battle, heuristic, null);
+}
+
+class Ai{
   constructor(player, battle, evaluationStrategy, selectionStrategy){
     this.player = player;
     this.battle = battle;
@@ -18,7 +23,7 @@ export default class Ai{
   getTurn(){
     let delay = new Promise(resolve => setTimeout(resolve, 5));
     let moves = this.enumerateMoves(this.battle);
-    log.error(moves.length);
+    log.info("heuristic score: " + heuristic(this.battle, this.player));
     return delay.then(() => Promise.resolve(moves[0]));
   }
 

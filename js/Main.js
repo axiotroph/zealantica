@@ -1,5 +1,5 @@
 import UI from "./ui/UI.js";
-import Ai from "./ai/Ai.js";
+import defaultAi from "./ai/Ai.js";
 import Battle from "./Battle.js";
 import BattleRunner from "./BattleRunner.js";
 
@@ -10,8 +10,8 @@ class Zealantica {
   go() {
     let battle = new Battle();
     let ui = new UI();
-    let ai1 = new Ai(0, battle, null, null);
-    let ai2 = new Ai(1, battle, null, null);
+    let ai1 = defaultAi(0, battle);
+    let ai2 = defaultAi(1, battle);
     let runner = new BattleRunner(battle, {0: ai1, 1: ui}, ui);
 
     document.battle = battle;

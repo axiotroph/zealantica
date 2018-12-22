@@ -1,3 +1,5 @@
+player abstraction?
+state deep copy
 ai
 Stats
 ui improvements
