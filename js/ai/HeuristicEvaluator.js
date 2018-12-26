@@ -9,7 +9,7 @@ export default function stateValue(state, player){
     }
   }
 
-  return 0;
+  return sum;
 }
 
 function unitValue(unit){
@@ -17,5 +17,5 @@ function unitValue(unit){
     return 0;
   }
 
-  return unit.health / 100.0
+  return unit.health / 100.0;
 }

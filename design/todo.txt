@@ -1,5 +1,4 @@
-player abstraction?
-state deep copy
+refactor battle state to be immutable
 ai
 Stats
 ui improvements

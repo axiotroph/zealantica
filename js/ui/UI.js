@@ -52,7 +52,8 @@ export default class UIPlayer extends Player{
       let style = new PIXI.TextStyle({
         fill: "white",
         wordWrap: true,
-        wordWrapWidth: frame.leftPanel.width
+        wordWrapWidth: frame.leftPanel.width,
+        fontSize: 14
       });
 
       this.leftText = new PIXI.Text("", style);
