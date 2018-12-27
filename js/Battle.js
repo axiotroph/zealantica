@@ -10,23 +10,6 @@ let b = 0;
 export default class Battle{
 
   constructor(){
-    log.info("Building initial state...");
-
-    this.units = {};
-
-    [0, 1].forEach((i) => {
-      [0, 1, 2].forEach((x) => {
-        [0, 1, 2].forEach((y) => {
-          let j = Math.floor(Math.random() * Object.keys(classes).length);
-          let clazz = classes[Object.keys(classes)[j]];
-          let unit = new Unit(clazz, i, x, y, this);
-          this.units[unit.id] = unit;
-        });
-      });     
-    });
-
-    this.activePlayer = Math.floor(Math.random() * 2);
-    this.turnCount = 0;
 
     this.prepareForNextAction();
   }
