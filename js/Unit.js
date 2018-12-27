@@ -21,6 +21,10 @@ export default class Unit {
     this.stunCounter = 0;
   }
 
+  clone(){
+    return Object.assign({}, this);
+  }
+
   nextTurn(){
     this.ap += this.apRegen;
 

@@ -15,10 +15,10 @@ export default class BattleRunner{
   }
 
   runStep(){
-    if(this.battle.finished()){
-      return this.battle.victor();
+    if(this.battle.state.finished()){
+      return this.battle.state.victor();
     }else{
-      let turn = this.players[this.battle.activePlayer].getTurn();
+      let turn = this.players[this.battle.state.activePlayer].getTurn();
       return turn.then(t => {
         this.battle.applyAction(t);
         if(this.ui != undefined){

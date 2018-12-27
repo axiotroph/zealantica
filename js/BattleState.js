@@ -1,6 +1,6 @@
-import Log from "./Log.js";
 import Unit from "./Unit.js";
 import classes from "./Class.js";
+import newUID from "./UID.js";
 
 import Log from "./Log.js";
 let log = Log("BattleState");
@@ -8,6 +8,7 @@ let log = Log("BattleState");
 export default class BattleState{
 
   constructor(priorState, action){
+    this.id = newUID();
     if(!priorState || !action){
       this.initInitialState();
     }else{
@@ -36,7 +37,7 @@ export default class BattleState{
     this.endTurnChecks();
   }
 
-  initFromPriorState(prior, action){
+  initFromPrior(prior, action){
     this.prior = prior;
     this.turnCount = prior.turnCount;
     this.activationsRemaining = prior.activationsRemaining;

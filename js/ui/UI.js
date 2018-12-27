@@ -63,8 +63,8 @@ export default class UIPlayer extends Player{
       this.battle = battle;
       this.unitTiles = {};
 
-      Object.values(battle.units).forEach((x) => {
-        this.unitTiles[x.id] = new UnitTile(this, x);
+      Object.values(battle.state.units).forEach((x) => {
+        this.unitTiles[x.id] = new UnitTile(this, x.id, battle);
       });
 
       this.update();
@@ -123,7 +123,7 @@ export default class UIPlayer extends Player{
       };
 
       this.onTileClick = tile => {
-        if(pending && tile.unitState().player == this.battle.activePlayer && tile.unitState().canAct()){
+        if(pending && tile.unitState().player == this.battle.state.activePlayer && tile.unitState().canAct()){
           pending = false;
           tile.showSelectBorder(true);
           resolve({'actor': tile.unitState(), 'actorTile': tile});
@@ -143,12 +143,12 @@ export default class UIPlayer extends Player{
       this.highlightOnHover = (hoverTile, highlightTile) => {
         return pending 
           && hoverTile != null 
-          && turnData.action.canTarget(turnData.actor, hoverTile.unitState(), this.battle) 
+          && turnData.action.canTarget(turnData.actor, hoverTile.unitState(), this.battle.state) 
           && turnData.action.willAffect(hoverTile.unitState(), highlightTile.unitState());
       };
 
       this.onTileClick = tile => {
-        if(pending && turnData.action.canTarget(turnData.actor, tile.unitState(), this.battle)){
+        if(pending && turnData.action.canTarget(turnData.actor, tile.unitState(), this.battle.state)){
           pending = false;
           turnData.target = tile.unitState();
           turnData.actorTile.showSelectBorder(false);
@@ -161,14 +161,10 @@ export default class UIPlayer extends Player{
 
 class UnitTile {
 
-  unitState(){
-    return this.battle.state.units[this.unitID];
-  }
-
   constructor(ui, unitID, battle){
+    this.battle = battle;
     this.ui = ui;
     this.unitID = unitID;
-    this.battle = battle'
 
     let texture = PIXI.utils.TextureCache[this.unitState().clazz.texture];
     this.sprite = new PIXI.Sprite(texture);
@@ -211,6 +207,11 @@ class UnitTile {
     this.sprite.on('mouseout', (e) => {
         this.ui.unitUnHover(this);
     });
+  }
+
+  unitState(){
+    console.log(this.battle.state.id, this.unitID);
+    return this.battle.state.units[this.unitID];
   }
 
   drawBorder(color){

@@ -7,7 +7,6 @@ export default class Battle{
 
   constructor(){
     this.state = new BattleState();
-    this.prepareForNextAction();
   }
 
   applyAction(action){
