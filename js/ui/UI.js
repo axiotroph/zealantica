@@ -83,7 +83,7 @@ export default class UIPlayer extends Player{
     if(!this.hoverTarget){
       this.rightText.text = "";
     }else{
-      this.rightText.text = this.hoverTarget.unitState.status();
+      this.rightText.text = this.hoverTarget.unitState().status();
     }
 
     for(var key in this.unitTiles){
@@ -119,14 +119,14 @@ export default class UIPlayer extends Player{
     let pending = true;
     return new Promise((resolve, reject) => {
       this.highlightOnHover = (hoverTile, highlightTile) => {
-        return pending && hoverTile == highlightTile && hoverTile.unitState.canAct();
+        return pending && hoverTile == highlightTile && hoverTile.unitState().canAct();
       };
 
       this.onTileClick = tile => {
-        if(pending && tile.unitState.player == this.battle.activePlayer && tile.unitState.canAct()){
+        if(pending && tile.unitState().player == this.battle.activePlayer && tile.unitState().canAct()){
           pending = false;
           tile.showSelectBorder(true);
-          resolve({'actor': tile.unitState, 'actorTile': tile});
+          resolve({'actor': tile.unitState(), 'actorTile': tile});
         }
       };
     });
@@ -143,14 +143,14 @@ export default class UIPlayer extends Player{
       this.highlightOnHover = (hoverTile, highlightTile) => {
         return pending 
           && hoverTile != null 
-          && turnData.action.canTarget(turnData.actor, hoverTile.unitState, this.battle) 
-          && turnData.action.willAffect(hoverTile.unitState, highlightTile.unitState);
+          && turnData.action.canTarget(turnData.actor, hoverTile.unitState(), this.battle) 
+          && turnData.action.willAffect(hoverTile.unitState(), highlightTile.unitState());
       };
 
       this.onTileClick = tile => {
-        if(pending && turnData.action.canTarget(turnData.actor, tile.unitState, this.battle)){
+        if(pending && turnData.action.canTarget(turnData.actor, tile.unitState(), this.battle)){
           pending = false;
-          turnData.target = tile.unitState;
+          turnData.target = tile.unitState();
           turnData.actorTile.showSelectBorder(false);
           resolve(turnData);
         }
@@ -161,21 +161,26 @@ export default class UIPlayer extends Player{
 
 class UnitTile {
 
-  constructor(ui, unitState){
-    this.ui = ui;
-    this.unitState = unitState;
+  unitState(){
+    return this.battle.state.units[this.unitID];
+  }
 
-    let texture = PIXI.utils.TextureCache[unitState.clazz.texture];
+  constructor(ui, unitID, battle){
+    this.ui = ui;
+    this.unitID = unitID;
+    this.battle = battle'
+
+    let texture = PIXI.utils.TextureCache[this.unitState().clazz.texture];
     this.sprite = new PIXI.Sprite(texture);
 
-    this.targetDimensions = frame.units[unitState.player][unitState.x][unitState.y];
+    this.targetDimensions = frame.units[this.unitState().player][this.unitState().x][this.unitState().y];
     this.baseSpriteDimensions = {height: this.sprite.height, width: this.sprite.width};
     this.scalex = this.sprite.width;
     this.scaley = this.sprite.height;
     this.scaleyRatio = (this.scaley / this.targetDimensions.height);
     this.scalexRatio = (this.scalex / this.targetDimensions.width);
 
-    ui.formations[unitState.player].addChild(this.sprite);
+    ui.formations[this.unitState().player].addChild(this.sprite);
 
     this.healthBar = new PIXI.Graphics();
     this.healthBar.beginFill(healthColor);
@@ -230,7 +235,7 @@ class UnitTile {
   }
 
   update(){
-    this.availableBorder.visible = this.unitState.canAct();
-    this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState.health / 100);
+    this.availableBorder.visible = this.unitState().canAct();
+    this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState().health / 100);
   }
 }
