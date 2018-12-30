@@ -30,9 +30,11 @@ class Ai extends Player{
 
   enumerateMoves(battle){
     let result = [];
-    let actives = battle.state.activeUnits();
-    for(var actorKey in actives){
-      let actor = actives[actorKey];
+    for(var actorKey in battle.state.units){
+      let actor = battle.state.units[actorKey];
+      if(!actor.canAct()){
+        continue;
+      }
 
       for(var actionKey in actor.abilities){
         let action = actor.abilities[actionKey];
