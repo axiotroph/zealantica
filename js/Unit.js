@@ -22,7 +22,9 @@ export default class Unit {
   }
 
   clone(){
-    return Object.assign({}, this);
+    let obj = Object.create(Unit.prototype);
+    Object.assign(obj, this);
+    return obj;
   }
 
   nextTurn(){

@@ -39,7 +39,7 @@ export default class BattleState{
     this.endTurnChecks();
   }
 
-  initFromPrior(prior, action){
+  initFromPrior(prior, turn){
     this.prior = prior;
     this.turnCount = prior.turnCount;
     this.activationsRemaining = prior.activationsRemaining;

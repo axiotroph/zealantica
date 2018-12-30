@@ -20,8 +20,14 @@ export default class Action {
   }
 
   validate(actor, target, state){
-    if(!actor.canAct() || actor.player != state.activePlayer || !this.canTarget(actor, target, state)){
-      throw "Tried to apply illegal action";
+    if(!actor.canAct()){
+      throw "Tried to apply illegal action - actor cannot act";
+    }
+    if(actor.player != state.activePlayer){
+      throw "Tried to apply illegal action - actor is not active player's";
+    }
+    if(!this.canTarget(actor, target, state)){
+      throw "Tried to apply illegal action - illegal target";
     }
   }
 
