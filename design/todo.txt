@@ -1,8 +1,8 @@
-refactor battle state to be immutable
 ai
 Stats
-ui improvements
 Magic
 randomness
+unit testing
+ui improvements
 Sequencing battles
 Progression
