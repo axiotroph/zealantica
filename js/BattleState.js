@@ -76,6 +76,7 @@ export default class BattleState{
     }
     throw "no unit at this position: " + x + ", " + y;
   }
+
   activeUnits(){
     return Object.values(this.units).filter((u) => u.player == this.activePlayer);
   }
