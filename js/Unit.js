@@ -4,9 +4,8 @@ import Log from "./Log.js";
 let log = Log("unit");
 
 export default class Unit {
-  constructor(clazz, player, x, y, game) {
+  constructor(clazz, player, x, y) {
     this.clazz = clazz;
-    this.game = game;
     this.player = player;
     this.x = x;
     this.y = y;
@@ -41,8 +40,11 @@ export default class Unit {
     this.stunTripped = false;
   }
 
-  canAct(){
-    return this.ap > 100 && this.game.activePlayer == this.player && this.isAlive() && !this.isStunned();
+  canAct(state){
+    if(state == undefined){
+      throw "state required";
+    }
+    return this.ap > 100 && state.activePlayer == this.player && this.isAlive() && !this.isStunned();
   }
 
   isAlive(){

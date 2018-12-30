@@ -20,7 +20,7 @@ export default class Action {
   }
 
   validate(actor, target, state){
-    if(!actor.canAct()){
+    if(!actor.canAct(state)){
       throw "Tried to apply illegal action - actor cannot act";
     }
     if(actor.player != state.activePlayer){

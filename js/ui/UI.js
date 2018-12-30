@@ -119,11 +119,11 @@ export default class UIPlayer extends Player{
     let pending = true;
     return new Promise((resolve, reject) => {
       this.highlightOnHover = (hoverTile, highlightTile) => {
-        return pending && hoverTile == highlightTile && hoverTile.unitState().canAct();
+        return pending && hoverTile == highlightTile && hoverTile.unitState().canAct(this.battle.state);
       };
 
       this.onTileClick = tile => {
-        if(pending && tile.unitState().player == this.battle.state.activePlayer && tile.unitState().canAct()){
+        if(pending && tile.unitState().player == this.battle.state.activePlayer && tile.unitState().canAct(this.battle.state)){
           pending = false;
           tile.showSelectBorder(true);
           resolve({'actor': tile.unitState(), 'actorTile': tile});
@@ -235,7 +235,7 @@ class UnitTile {
   }
 
   update(){
-    this.availableBorder.visible = this.unitState().canAct();
+    this.availableBorder.visible = this.unitState().canAct(this.battle.state);
     this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState().health / 100);
   }
 }

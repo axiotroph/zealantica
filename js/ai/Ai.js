@@ -32,7 +32,7 @@ class Ai extends Player{
     let result = [];
     for(var actorKey in battle.state.units){
       let actor = battle.state.units[actorKey];
-      if(!actor.canAct()){
+      if(!actor.canAct(battle.state)){
         continue;
       }
 

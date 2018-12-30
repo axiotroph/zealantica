@@ -28,7 +28,7 @@ export default class BattleState{
         [0, 1, 2].forEach((y) => {
           let j = Math.floor(Math.random() * Object.keys(classes).length);
           let clazz = classes[Object.keys(classes)[j]];
-          let unit = new Unit(clazz, i, x, y, this);
+          let unit = new Unit(clazz, i, x, y);
           this.units[unit.id] = unit;
         });
       });     
@@ -56,7 +56,7 @@ export default class BattleState{
   }
 
   endTurnChecks(){
-    if(this.activeUnits().every((u) => !u.canAct()) || this.activationsRemaining <= 0){
+    if(this.activeUnits().every((u) => !u.canAct(this)) || this.activationsRemaining <= 0){
       this.turnCount++;
       this.activePlayer = (this.activePlayer + 1) % 2;
 
