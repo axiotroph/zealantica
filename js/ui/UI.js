@@ -210,7 +210,6 @@ class UnitTile {
   }
 
   unitState(){
-    console.log(this.battle.state.id, this.unitID);
     return this.battle.state.units[this.unitID];
   }
 

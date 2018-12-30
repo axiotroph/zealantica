@@ -5,6 +5,8 @@ import newUID from "./UID.js";
 import Log from "./Log.js";
 let log = Log("BattleState");
 
+let built = false;
+
 export default class BattleState{
 
   constructor(priorState, action){

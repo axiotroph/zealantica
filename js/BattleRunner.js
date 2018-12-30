@@ -20,6 +20,10 @@ export default class BattleRunner{
     }else{
       let turn = this.players[this.battle.state.activePlayer].getTurn();
       return turn.then(t => {
+        if(t == undefined){
+          throw "got undefined turn?";
+        }
+
         this.battle.applyAction(t);
         if(this.ui != undefined){
           this.ui.update();
