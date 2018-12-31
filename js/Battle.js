@@ -10,7 +10,7 @@ export default class Battle{
   }
 
   applyAction(action){
-    this.state = new BattleState(this.state, action);
+    this.state = new BattleState(this.state, {'action': action});
   }
 
   status(){

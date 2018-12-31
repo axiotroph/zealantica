@@ -9,12 +9,16 @@ let built = false;
 
 export default class BattleState{
 
-  constructor(priorState, action){
+  constructor(priorState, next){
     this.id = newUID();
-    if(!priorState || !action){
+    if(!priorState || !next){
       this.initInitialState();
+    }else if(next['action']){
+      this.initFromPrior(priorState, next.action);
+    }else if(next['special'] == 'nextTurn'){
+      this.initNextTurn(priorState);
     }else{
-      this.initFromPrior(priorState, action);
+      throw "don't know how to init a new turn from a state and " + JSON.stringify(next);
     }
   }
 
@@ -39,7 +43,7 @@ export default class BattleState{
     this.endTurnChecks();
   }
 
-  initFromPrior(prior, turn){
+  clonePrior(prior){
     this.prior = prior;
     this.turnCount = prior.turnCount;
     this.activationsRemaining = prior.activationsRemaining;
@@ -49,9 +53,17 @@ export default class BattleState{
     for(var key in prior.units){
       this.units[key] = prior.units[key].clone();
     }
+  }
 
+  initFromPrior(prior, turn){
+    this.clonePrior(prior);
     turn.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this);
+    this.endTurnChecks();
+  }
 
+  initNextTurn(prior){
+    this.clonePrior(prior);
+    this.activationsRemaining = 0;
     this.endTurnChecks();
   }
 

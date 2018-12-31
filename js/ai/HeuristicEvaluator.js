@@ -1,12 +1,17 @@
+import BattleState from "../BattleState.js";
+
 export default function stateValue(state, player){
   return oneSideStateValue(state, player) / oneSideStateValue(state, (player+1)%2);
 }
 
 function oneSideStateValue(state, player){
+  let fState = new BattleState(state, {'special': 'nextTurn'});
+  fState = new BattleState(fState, {'special': 'nextTurn'});
+
   let factors = [];
   let weights = [];
 
-  let myUnits = Object.values(state.units).filter(x => x.player == player && x.isAlive());
+  let myUnits = Object.values(fState.units).filter(x => x.player == player && x.isAlive());
 
   let weight = function(value, weight){
     factors.push(value);
@@ -22,7 +27,7 @@ function oneSideStateValue(state, player){
   let aliveCount = 0.1 + myUnits.filter(x => x.isAlive()).length;
   weight(aliveCount, 1);
 
-  let canActCount = 0.1 + myUnits.filter(x => x.couldAct(state)).length;
+  let canActCount = 0.1 + myUnits.filter(x => x.couldAct(fState)).length;
   weight(canActCount, 2);
 
   let zeroComboCount = 0.1 + myUnits.filter(x => x.stunCounter == 0).length;
