@@ -25,6 +25,7 @@ class Ai extends Player{
     let delay = new Promise(resolve => setTimeout(resolve, 5));
     let moves = this.enumerateMoves(this.battle);
     log.info("heuristic score: " + heuristic(this.battle.state, this.player).toFixed(2));
+    // Need to evaluate against a fresh turn
     return delay.then(() => Promise.resolve(moves[0]));
   }
 

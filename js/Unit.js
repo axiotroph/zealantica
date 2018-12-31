@@ -40,11 +40,18 @@ export default class Unit {
     this.stunTripped = false;
   }
 
+  couldAct(state){
+    if(state == undefined){
+      throw "state required";
+    }
+    return this.ap > 100 && this.isAlive() && !this.isStunned();
+  }
+
   canAct(state){
     if(state == undefined){
       throw "state required";
     }
-    return this.ap > 100 && state.activePlayer == this.player && this.isAlive() && !this.isStunned();
+    return state.activePlayer == this.player && this.couldAct(state);
   }
 
   isAlive(){
