@@ -1,11 +1,12 @@
 import Player from "../Player.js";
 import heuristic from "./HeuristicEvaluator.js"
+import greedy from "./GreedyStrategy.js"
 
 import Log from "../Log.js";
 let log = Log("ai");
 
 export default function ai(player, battle){
-  return new Ai(player, battle, heuristic, null);
+  return new Ai(player, battle, heuristic, greedy);
 }
 
 class Ai extends Player{
@@ -22,12 +23,13 @@ class Ai extends Player{
   }
 
   getTurn(){
+    log.info("heuristic score: " + this.evaluationStrategy(this.battle.state, this.player).toFixed(2));
+
     let delay = new Promise(resolve => setTimeout(resolve, 5));
     let moves = this.enumerateMoves(this.battle);
+    let choice = this.selectionStrategy(this.battle.state, moves, this.evaluationStrategy, this.player);
 
-    log.info("heuristic score: " + heuristic(this.battle.state, this.player).toFixed(2));
-
-    return delay.then(() => Promise.resolve(moves[0]));
+    return delay.then(() => Promise.resolve(choice));
   }
 
   enumerateMoves(battle){

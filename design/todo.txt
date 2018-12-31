@@ -1,6 +1,6 @@
-ai
 Stats
 Magic
+next turns should not be automatic
 randomness
 unit testing
 ui improvements
