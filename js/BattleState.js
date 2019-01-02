@@ -27,12 +27,29 @@ export default class BattleState{
 
     this.units = {};
 
+    let meele = Object.values(classes).filter(x => x.tags.meele);
+    let ranged = Object.values(classes).filter(x => x.tags.ranged);
+    let magic = Object.values(classes).filter(x => x.tags.magic);
+
+    let select = function(vals){
+      let j = Math.floor(Math.random() * Object.keys(vals).length);
+      return vals[Object.keys(vals)[j]];
+    };
+
     [0, 1].forEach((i) => {
       [0, 1, 2].forEach((x) => {
         [0, 1, 2].forEach((y) => {
-          let j = Math.floor(Math.random() * Object.keys(classes).length);
-          let clazz = classes[Object.keys(classes)[j]];
+          let classGroup = null
+          if(y == 0) 
+            classGroup = select([magic, magic, magic, ranged, ranged, meele])
+          if(y == 1)
+            classGroup = select([magic, ranged, ranged, ranged, meele])
+          if(y == 2)
+            classGroup = select([meele, meele, meele, meele, meele, ranged, ranged, magic])
+
+          let clazz = select(classGroup);
           let unit = new Unit(clazz, i, x, y);
+
           this.units[unit.id] = unit;
         });
       });     

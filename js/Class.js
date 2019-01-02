@@ -1,11 +1,12 @@
 import attacks from "./BasicAttacks.js";
 
 class Class {
-  constructor(texture, name, basicAttack, stats){
+  constructor(texture, name, basicAttack, stats, tags){
     this.texture = texture;
     this.name = name;
     this.stats = stats;
     this.basicAttack = basicAttack;
+    this.tags = tags;
   }
 }
 
@@ -22,6 +23,9 @@ const classes = {
       'wis': 150,
       'ala': 65,
     },
+    {
+      'meele': true,
+    },
   ),
 
   "axeman" : new Class(
@@ -35,6 +39,9 @@ const classes = {
       'int': 60,
       'wis': 50,
       'ala': 60,
+    },
+    {
+      'meele': true,
     },
   ),
 
@@ -50,6 +57,9 @@ const classes = {
       'wis': 80,
       'ala': 75,
     },
+    {
+      'meele': true,
+    },
   ),
 
   "gunner" : new Class(
@@ -63,6 +73,9 @@ const classes = {
       'int': 80,
       'wis': 100,
       'ala': 75,
+    },
+    {
+      'ranged': true,
     },
   ),
 
@@ -78,6 +91,9 @@ const classes = {
       'wis': 120,
       'ala': 85,
     },
+    {
+      'ranged': true,
+    },
   ),
 
   "artilleryman" : new Class(
@@ -91,6 +107,9 @@ const classes = {
       'int': 60,
       'wis': 85,
       'ala': 65,
+    },
+    {
+      'ranged': true,
     },
   ),
 
@@ -106,6 +125,9 @@ const classes = {
       'wis': 150,
       'ala': 72,
     },
+    {
+      'magic': true,
+    },
   ),
 
   "monk" : new Class(
@@ -119,6 +141,9 @@ const classes = {
       'int': 130,
       'wis': 180,
       'ala': 78,
+    },
+    {
+      'magic': true,
     },
   ),
 }

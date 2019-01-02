@@ -1,4 +1,4 @@
-Stats
+clean log spam
 Magic
 next turns should not be automatic
 randomness
