@@ -1,5 +1,5 @@
 const numbers = {
-  "baseAttackDamage": 10,
+  "baseAttackDamage": 100,
 }
 
 export default numbers;

@@ -9,11 +9,11 @@ export default class Unit {
     this.player = player;
     this.x = x;
     this.y = y;
-    this.health = this.stats().maxHealth;
     this.id = newUID();
     this.abilities = [this.clazz.basicAttack];
-    this.ap = 0;
-    this.apRegen = 74;
+
+    this.health = this.stats().maxHealth;
+    this.ap = Math.floor(this.stats().ala * 0.5);
 
     this.stunTripped = false;
     this.stunnedTime = 0;
@@ -27,7 +27,7 @@ export default class Unit {
   }
 
   nextTurn(){
-    this.ap += this.apRegen;
+    this.ap += this.stats().ala;
 
     if(this.stunnedTime == 1){
       log.info(this.name() + " recovers from stun");
@@ -88,12 +88,17 @@ export default class Unit {
     let result = 
       this.name() 
       + "\nHealth: " + this.health
-      + "\nAP: " + this.ap;
+      + "\nAP: " + this.ap
+      + "\n";
     if(this.stunnedTime > 0){
-      result += ("\nStunned: " + this.stunnedTime);
+      result += ("\nStunned: " + this.stunnedTime + "\n");
     }
     if(this.stunCounter > 0){
-      result += ("\nCombo: " + this.stunCounter);
+      result += ("\nCombo: " + this.stunCounter + "\n");
+    }
+    let stats = this.stats();
+    for(let stat in stats){
+      result += "\n" + stat + ": " + stats[stat];
     }
     return result + this.debugInfo();
   }
@@ -103,16 +108,13 @@ export default class Unit {
   }
 
   stats(){
-    return {
-      health: this.health,
-      maxHealth: this.clazz.maxHealth,
-      attack: this.clazz.attack,
-      defense: this.clazz.defense,
-    }
+    let stats = Object.assign({}, this.clazz.stats);
+    stats.maxHealth = stats.vit * 10;
+    return stats;
   }
 
   debugInfo(){
-    return "\nDEBUG--"
+    return "\n\nDEBUG--"
       + "\nID: " + this.id
       + "\nx: " + this.x
       + "\ny: " + this.y

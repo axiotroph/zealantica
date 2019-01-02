@@ -73,7 +73,7 @@ export default class BattleState{
       this.activePlayer = (this.activePlayer + 1) % 2;
 
       this.activeUnits().forEach((u) => u.nextTurn());
-      this.activationsRemaining = 5;
+      this.activationsRemaining = Math.min(5, this.turnCount);
 
       log.info("Starting turn " + this.turnCount);
       this.endTurnChecks();

@@ -236,6 +236,6 @@ class UnitTile {
 
   update(){
     this.availableBorder.visible = this.unitState().canAct(this.battle.state);
-    this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState().health / 100);
+    this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState().health / this.unitState().stats().maxHealth);
   }
 }

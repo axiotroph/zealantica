@@ -11,7 +11,7 @@ class BasicAttack extends Action{
   }
 
   unitPerform(actor, thisTarget, state, magnitude){
-    let damage = Math.floor(numbers.baseAttackDamage * actor.stats().attack / thisTarget.stats().defense * magnitude);
+    let damage = Math.floor(numbers.baseAttackDamage * actor.stats().atk / thisTarget.stats().def * magnitude);
     thisTarget.damage(damage);
     log.info(actor.name() + " strikes " + thisTarget.name() + " for " + damage + " damage");
   }

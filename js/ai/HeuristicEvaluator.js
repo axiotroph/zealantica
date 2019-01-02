@@ -46,7 +46,6 @@ function unitValue(unit){
 function weightedGeometricMean(vals, weights){
   let sum = 0;
   let weightSum = 0;
-  console.log(vals, weights);
   for(let i in vals){
     if(vals[i] <= 0){
       throw "Cannot find geometric average of nonpositive value";

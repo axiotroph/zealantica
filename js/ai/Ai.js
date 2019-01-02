@@ -25,7 +25,7 @@ class Ai extends Player{
   getTurn(){
     log.info("heuristic score: " + this.evaluationStrategy(this.battle.state, this.player).toFixed(2));
 
-    let delay = new Promise(resolve => setTimeout(resolve, 5));
+    let delay = new Promise(resolve => setTimeout(resolve, 200));
     let moves = this.enumerateMoves(this.battle);
     let choice = this.selectionStrategy(this.battle.state, moves, this.evaluationStrategy, this.player);
 
