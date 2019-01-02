@@ -17,10 +17,10 @@ const classes = {
     attacks.sword,
     {
       'atk': 100,
-      'def': 200,
-      'vit': 150,
-      'int': 120,
-      'wis': 150,
+      'def': 150,
+      'vit': 130,
+      'int': 80,
+      'wis': 130,
       'ala': 65,
     },
     {
@@ -33,9 +33,9 @@ const classes = {
     "Axeman",
     attacks.axe,
     {
-      'atk': 150,
-      'def': 130,
-      'vit': 200,
+      'atk': 125,
+      'def': 125,
+      'vit': 175,
       'int': 60,
       'wis': 50,
       'ala': 60,
@@ -50,9 +50,9 @@ const classes = {
     "Spearman",
     attacks.spear,
     {
-      'atk': 180,
+      'atk': 150,
       'def': 115,
-      'vit': 150,
+      'vit': 120,
       'int': 60,
       'wis': 80,
       'ala': 75,
@@ -67,7 +67,7 @@ const classes = {
     "Gunner",
     attacks.gun,
     {
-      'atk': 120,
+      'atk': 125,
       'def': 100,
       'vit': 80,
       'int': 80,
@@ -101,7 +101,7 @@ const classes = {
     "Artilleryman",
     attacks.cannon,
     {
-      'atk': 50,
+      'atk': 75,
       'def': 115,
       'vit': 115,
       'int': 60,
