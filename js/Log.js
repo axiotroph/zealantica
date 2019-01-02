@@ -4,12 +4,17 @@ export function logText(){
   return logData.join("\n");
 }
 
-function write(writer, prefix, severity, content) {
+function write(writer, prefix, severity, content, raw) {
   let str = '[' + prefix + '][' + writer.name + ']: ' + content;
   console.log(str);
 
-  if(severity <= 3){
-    logData.push(str);
+  if(severity <= 2 || raw){
+    if(raw){
+      logData.push(content);
+    }else{
+      logData.push(str);
+    }
+
     while(logData.length > 20){
       logData.shift();
     }
@@ -31,6 +36,10 @@ class LogWriter {
 
   info(msg) {
     write(this, 'info', 3, msg);
+  }
+
+  user(msg){
+    write(this, 'user', 3, msg, true);
   }
 
   warn(msg) {

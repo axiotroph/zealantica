@@ -49,4 +49,8 @@ export default class Action {
   unitPerform(actor, thisTarget, state, magnitude){
     throw "abstract method";
   }
+
+  name(){
+    throw "abstract method";
+  }
 }

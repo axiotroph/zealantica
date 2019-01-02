@@ -11,6 +11,7 @@ export default class Battle{
 
   applyAction(action){
     this.state = new BattleState(this.state, {'action': action});
+    this.state.events.forEach(x => log.user(x.userString()));
   }
 
   status(){

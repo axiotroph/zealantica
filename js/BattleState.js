@@ -1,6 +1,7 @@
 import Unit from "./Unit.js";
 import classes from "./Class.js";
 import newUID from "./UID.js";
+import {NextTurn as NextTurnEvent, Ability as AbilityEvent} from "./BattleEvents.js";
 
 import Log from "./Log.js";
 let log = Log("BattleState");
@@ -11,6 +12,7 @@ export default class BattleState{
 
   constructor(priorState, next){
     this.id = newUID();
+    this.events = [];
     if(!priorState || !next){
       this.initInitialState();
     }else if(next['action']){
@@ -75,6 +77,7 @@ export default class BattleState{
   initFromPrior(prior, turn){
     this.clonePrior(prior);
     turn.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this);
+    this.events.push(new AbilityEvent(turn.action, turn.actor, turn.target, null));
     this.endTurnChecks();
   }
 
@@ -91,6 +94,8 @@ export default class BattleState{
 
       this.activeUnits().forEach((u) => u.nextTurn());
       this.activationsRemaining = Math.min(5, this.turnCount);
+
+      this.events.push(new NextTurnEvent(this.turnCount));
 
       log.info("Starting turn " + this.turnCount);
       this.endTurnChecks();

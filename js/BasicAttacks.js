@@ -6,39 +6,50 @@ import Log from "./Log.js";
 let log = Log("BasicAttack");
 
 class BasicAttack extends Action{
-  constructor(targetSpec, patternSpec){
+  constructor(targetSpec, patternSpec, weaponName){
     super(targetSpec, patternSpec);
+    this.weaponName = weaponName;
   }
 
   unitPerform(actor, thisTarget, state, magnitude){
     let damage = Math.floor(numbers.baseAttackDamage * actor.stats().atk / thisTarget.stats().def * magnitude);
     thisTarget.damage(damage);
-    log.info(actor.name() + " strikes " + thisTarget.name() + " for " + damage + " damage");
+  }
+
+  name(){
+    return "basic attack (" + this.weaponName + ")";
   }
 }
 
 const basicAttacksByWeapon = {
   "sword": new BasicAttack(
     Targets.and(Targets.front, Targets.enemy),
-    Patterns.single),
+    Patterns.single,
+    "sword"),
   "spear": new BasicAttack(
     Targets.and(Targets.front, Targets.enemy),
-    Patterns.spear),
+    Patterns.spear,
+    "spear"),
   "axe": new BasicAttack(
     Targets.and(Targets.front, Targets.enemy),
-    Patterns.axe),
+    Patterns.axe,
+    "axe"),
   "bow": new BasicAttack(
     Targets.enemy,
-    Patterns.single),
+    Patterns.single,
+    "bow"),
   "gun": new BasicAttack(
     Targets.and(Targets.front, Targets.enemy),
-    Patterns.gun),
+    Patterns.gun,
+    "rifle"),
   "cannon": new BasicAttack(
     Targets.enemy,
-    Patterns.cannon),
+    Patterns.cannon,
+    "cannon"),
   "staff": new BasicAttack(
     Targets.and(Targets.front, Targets.enemy),
-    Patterns.single),
+    Patterns.single,
+    "staff"),
 }
 
 export default basicAttacksByWeapon;
