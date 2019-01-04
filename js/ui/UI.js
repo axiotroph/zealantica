@@ -49,6 +49,9 @@ export default class UIPlayer extends Player{
       this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
       this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
 
+      this.actionBar = this.drawPanel(this.field, frame.actionBar, medGrey);
+      this.actions = frame.actions.map(x=> this.drawPanel(this.actionBar, x, darkGrey));
+
       let style = new PIXI.TextStyle({
         fill: "white",
         wordWrap: true,
