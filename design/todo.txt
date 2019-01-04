@@ -1,8 +1,12 @@
-clean log spam
-Magic
-next turns should not be automatic
-randomness
-unit testing
-ui improvements
-Sequencing battles
-Progression
+Progress:
+  Magic
+  Surface more player log info (battle events, which also lead to animations)
+  UI Animations
+  Randomness
+  Sequencing battles
+  Progression
+
+Refactors:
+  UI (should use reusable logic to layout elements)
+  State (should have only one change per state, with a queue of triggers to process, so that we can see intervening states)
+    Needed for animation and for some ai logic (properly handle no action between turns)
