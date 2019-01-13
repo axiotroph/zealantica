@@ -52,7 +52,8 @@ export default class UIPlayer extends Player{
       this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
 
       this.actionBar = this.drawPanel(this.field, frame.actionBar, medGrey);
-      this.actions = frame.actions.map(x=> this.drawPanel(this.actionBar, x, darkGrey));
+      //this.actionBacks = frame.actions.map(x=> this.drawPanel(this.actionBar, x, darkGrey));
+      this.actionTiles = [];
 
       let style = new PIXI.TextStyle({
         fill: "white",
@@ -112,6 +113,14 @@ export default class UIPlayer extends Player{
     }
   }
 
+  actionHover(tile){
+    console.log("hovering");
+  }
+
+  actionUnHover(tile){
+    console.log("unhovering");
+  }
+
   onTileClick(){}
   highlightOnHover(){return false;}
 
@@ -152,6 +161,12 @@ export default class UIPlayer extends Player{
           && turnData.action.willAffect(hoverTile.unitState(), highlightTile.unitState());
       };
 
+      let index = 0;
+      turnData.actor.abilities.forEach(action => {
+        this.actionTiles.push(new ActionTile(this, action, index));
+        index++;
+      });
+
       this.onTileClick = tile => {
         if(pending && turnData.action.canTarget(turnData.actor, tile.unitState(), this.battle.state)){
           pending = false;
@@ -160,6 +175,39 @@ export default class UIPlayer extends Player{
           resolve(turnData);
         }
       };
+    });
+  }
+}
+
+class ActionTile {
+  constructor(ui, action, index){
+    this.ui = ui;
+    this.action = action;
+    this.index = index;
+
+    let texture = PIXI.utils.TextureCache[action.texture];
+    console.log(action.texture);
+    this.sprite = new PIXI.Sprite(texture);
+    this.sprite.x = frame.actions[index].x;
+    this.sprite.y = frame.actions[index].y;
+    this.sprite.width = frame.actions[index].width;
+    this.sprite.height = frame.actions[index].height;
+    console.log(this.sprite.x, this.sprite.y, this.sprite.height, this.sprite.width);
+
+    ui.actionBar.addChild(this.sprite);
+
+    this.sprite.interactive = true;
+
+    this.sprite.on('mouseover', (e) => {
+      this.ui.actionHover(this);
+    });
+
+    this.sprite.on('mouseout', (e) => {
+      this.ui.actionHover(this);
+    });
+
+    this.sprite.on('click', (e) => {
+      this.onClick();
     });
   }
 }
