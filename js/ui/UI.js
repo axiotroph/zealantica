@@ -51,8 +51,7 @@ export default class UIPlayer extends Player{
       this.formations[0] = this.drawPanel(this.field, frame.formation0, darkGrey);
       this.formations[1] = this.drawPanel(this.field, frame.formation1, darkGrey);
 
-      this.actionBar = this.drawPanel(this.field, frame.actionBar, medGrey);
-      //this.actionBacks = frame.actions.map(x=> this.drawPanel(this.actionBar, x, darkGrey));
+      this.actionBar = this.drawPanel(this.field, frame.actionBar, darkGrey);
       this.actionTiles = [];
 
       let style = new PIXI.TextStyle({
@@ -167,6 +166,11 @@ export default class UIPlayer extends Player{
         index++;
       });
 
+      let cancelAction = {
+        texture: 'assets/cancel.png'
+      }
+      this.actionTiles.push(new ActionTile(this, cancelAction, index));
+
       this.onTileClick = tile => {
         if(pending && turnData.action.canTarget(turnData.actor, tile.unitState(), this.battle.state)){
           pending = false;
@@ -179,30 +183,76 @@ export default class UIPlayer extends Player{
   }
 }
 
-class ActionTile {
+class BorderedTile {
+  drawBorders(){
+    this.availableBorder = this.drawBorder(unitAvailableBorderColor);
+    this.hoverBorder = this.drawBorder(hoverBorderColor);
+    this.selectBorder = this.drawBorder(selectBorderColor);
+  }
+
+  drawBorder(color){
+    let border = new PIXI.Graphics();
+
+    border.lineStyle(frame.borderThickness * this.scaleyRatio, color);
+    let offset = frame.borderThickness/2 * this.scaleyRatio;
+    border.drawRect(offset, offset, this.scalex - offset - 1, this.scaley - offset - 1);
+
+    border.visible = false;
+    this.sprite.addChild(border);
+
+    return border;
+  }
+
+  showSelectBorder(bool){
+    this.selectBorder.visible = bool;
+  }
+
+  showIndicatorBorder(bool){
+    this.hoverBorder.visible = bool;
+  }
+
+  showAvailableBorder(bool){
+    this.availableBorder.visible = bool;
+  }
+}
+
+class ActionTile extends BorderedTile{
   constructor(ui, action, index){
+    super();
     this.ui = ui;
     this.action = action;
     this.index = index;
 
     let texture = PIXI.utils.TextureCache[action.texture];
     console.log(action.texture);
+
     this.sprite = new PIXI.Sprite(texture);
+    ui.actionBar.addChild(this.sprite);
+
+    // needed for the borders
+    this.targetDimensions = frame.actions[index]
+    this.baseSpriteDimensions = {height: this.sprite.height, width: this.sprite.width};
+    this.scalex = this.sprite.width;
+    this.scaley = this.sprite.height;
+    this.scaleyRatio = (this.scaley / this.targetDimensions.height);
+    this.scalexRatio = (this.scalex / this.targetDimensions.width);
+
     this.sprite.x = frame.actions[index].x;
     this.sprite.y = frame.actions[index].y;
     this.sprite.width = frame.actions[index].width;
     this.sprite.height = frame.actions[index].height;
-    console.log(this.sprite.x, this.sprite.y, this.sprite.height, this.sprite.width);
 
-    ui.actionBar.addChild(this.sprite);
+    this.drawBorders();
 
     this.sprite.interactive = true;
 
     this.sprite.on('mouseover', (e) => {
+      this.showIndicatorBorder(true);
       this.ui.actionHover(this);
     });
 
     this.sprite.on('mouseout', (e) => {
+      this.showIndicatorBorder(false);
       this.ui.actionHover(this);
     });
 
@@ -212,9 +262,10 @@ class ActionTile {
   }
 }
 
-class UnitTile {
+class UnitTile extends BorderedTile {
 
   constructor(ui, unitID, battle){
+    super();
     this.battle = battle;
     this.ui = ui;
     this.unitID = unitID;
@@ -239,14 +290,13 @@ class UnitTile {
 		this.healthBar.y = this.scaleyRatio * (this.targetDimensions.height - frame.healthHeight);
     this.sprite.addChild(this.healthBar);
 
-    this.availableBorder = this.drawBorder(unitAvailableBorderColor);
-    this.hoverBorder = this.drawBorder(hoverBorderColor);
-    this.selectBorder = this.drawBorder(selectBorderColor);
-
     this.sprite.x = this.targetDimensions.x;
     this.sprite.y = this.targetDimensions.y;
     this.sprite.height = this.targetDimensions.height;
     this.sprite.width = this.targetDimensions.width;
+
+    this.drawBorders();
+
     this.update();
 
     this.sprite.interactive = true;
@@ -260,35 +310,15 @@ class UnitTile {
     this.sprite.on('mouseout', (e) => {
         this.ui.unitUnHover(this);
     });
+
   }
 
   unitState(){
     return this.battle.state.units[this.unitID];
   }
 
-  drawBorder(color){
-    let border = new PIXI.Graphics();
-
-    border.lineStyle(frame.borderThickness * this.scaleyRatio, color);
-    let offset = frame.borderThickness/2 * this.scaleyRatio;
-    border.drawRect(offset, offset, this.scalex - offset - 1, this.scaley - offset - 1);
-
-    border.visible = false;
-    this.sprite.addChild(border);
-
-    return border;
-  }
-
-  showSelectBorder(bool){
-    this.selectBorder.visible = bool;
-  }
-
-  showIndicatorBorder(bool){
-    this.hoverBorder.visible = bool;
-  }
-
   update(){
-    this.availableBorder.visible = this.unitState().canAct(this.battle.state);
+    this.showAvailableBorder(this.unitState().canAct(this.battle.state));
     this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState().health / this.unitState().stats().maxHealth);
   }
 }

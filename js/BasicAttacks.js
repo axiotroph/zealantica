@@ -9,7 +9,7 @@ class BasicAttack extends Action{
   constructor(targetSpec, patternSpec, weaponName){
     super(targetSpec, patternSpec);
     this.weaponName = weaponName;
-    this.texture = "assets/attack.jpg";
+    this.texture = "assets/attack.png";
   }
 
   unitPerform(actor, thisTarget, state, magnitude){

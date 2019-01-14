@@ -51,8 +51,8 @@ let actionBorderWidth = Math.floor(actionSideLength*actionBorderRatio);
 let actionInnerSideLength = actionSideLength - 2*actionBorderWidth;
 
 frame.actions = []
-for(let i = 0; i<actionsWidth; i++){
-  for(let j = 0; j<actionsHeight; j++){
+for(let j = 0; j<actionsHeight; j++){
+  for(let i = 0; i<actionsWidth; i++){
     frame.actions.push({
       x: actionXGutter + actionBorderWidth + i*actionSideLength,
       y: actionYGutter + actionBorderWidth + j*actionSideLength,
