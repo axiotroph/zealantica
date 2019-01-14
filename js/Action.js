@@ -19,7 +19,15 @@ export default class Action {
     return this.patternSpec(target, secondTarget) > 0 && target.player == secondTarget.player;
   }
 
+  canActivate(actor, state){
+    return true;
+  }
+
   validate(actor, target, state){
+    if(!this.canActivate(actor, state)){
+      throw "Tried to illegal action - actor cannot use this ability";
+    }
+
     if(!actor.canAct(state)){
       throw "Tried to apply illegal action - actor cannot act";
     }

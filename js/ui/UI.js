@@ -113,7 +113,6 @@ export default class UIPlayer extends Player{
   }
 
   actionHover(tile){
-    console.log("hovering");
     this.rightText.text = tile.action.status();
   }
 
@@ -127,7 +126,7 @@ export default class UIPlayer extends Player{
 
   getTurn(){
     log.trace("waiting for turn imput");
-    return this.getActor().then(this.getAction.bind(this)).then(this.getTarget.bind(this));
+    return this.getActor().then(this.getTarget.bind(this));
   }
 
   getActor(){
@@ -155,6 +154,7 @@ export default class UIPlayer extends Player{
   getTarget(turnData){
     let pending = true;
     return new Promise((resolve, reject) => {
+      let self = this;
       this.highlightOnHover = (hoverTile, highlightTile) => {
         return pending 
           && hoverTile != null 
@@ -163,22 +163,54 @@ export default class UIPlayer extends Player{
       };
 
       let index = 0;
+      let selectedActionTile = null;
+
       turnData.actor.abilities.forEach(action => {
-        this.actionTiles.push(new ActionTile(this, action, index));
+        let tile = new ActionTile(this, action, index, this.battle);
+        this.actionTiles.push(tile);
+        tile.onClick = function(){
+          if(tile.action.canActivate(turnData.actor, this.battle.state)){
+            selectedActionTile.showSelectBorder(false);
+
+            selectedActionTile = tile;
+            tile.showSelectBorder(true);
+            turnData.action = tile.action;
+          }
+        };
         index++;
       });
+
+      let cleanupActionTiles = function(){
+        self.actionTiles.forEach(tile => {
+          self.actionBar.removeChild(tile.sprite);
+        });
+        self.actionTiles = [];
+      };
 
       let cancelAction = {
         texture: 'assets/cancel.png',
         status: function(){return "cancel"},
+        canActivate: function(){return true},
       }
-      this.actionTiles.push(new ActionTile(this, cancelAction, index));
+
+      let cancelTile = new ActionTile(this, cancelAction, index, this.battle);
+      cancelTile.onClick = function(){
+        turnData.actorTile.showSelectBorder(false);
+        cleanupActionTiles();
+        self.getTurn().then(resolve, reject);
+      }
+      this.actionTiles.push(cancelTile);
+
+      turnData.action = turnData.actor.abilities[0];
+      selectedActionTile = this.actionTiles[0];
+      selectedActionTile.showSelectBorder(true);
 
       this.onTileClick = tile => {
         if(pending && turnData.action.canTarget(turnData.actor, tile.unitState(), this.battle.state)){
           pending = false;
           turnData.target = tile.unitState();
           turnData.actorTile.showSelectBorder(false);
+          cleanupActionTiles();
           resolve(turnData);
         }
       };
@@ -220,14 +252,14 @@ class BorderedTile {
 }
 
 class ActionTile extends BorderedTile{
-  constructor(ui, action, index){
+  constructor(ui, action, index, battle){
     super();
     this.ui = ui;
     this.action = action;
     this.index = index;
+    this.battle = battle;
 
     let texture = PIXI.utils.TextureCache[action.texture];
-    console.log(action.texture);
 
     this.sprite = new PIXI.Sprite(texture);
     ui.actionBar.addChild(this.sprite);
@@ -250,7 +282,7 @@ class ActionTile extends BorderedTile{
     this.sprite.interactive = true;
 
     this.sprite.on('mouseover', (e) => {
-      this.showIndicatorBorder(true);
+      this.showIndicatorBorder(this.action.canActivate(this.actor, this.battle.state));
       this.ui.actionHover(this);
     });
 
