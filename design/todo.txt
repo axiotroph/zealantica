@@ -1,5 +1,5 @@
 Progress:
-  Magic
+  some spells
   Surface more player log info (battle events, which also lead to animations)
   UI Animations
   Randomness
