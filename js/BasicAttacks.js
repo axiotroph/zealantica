@@ -20,6 +20,10 @@ class BasicAttack extends Action{
   name(){
     return "basic attack (" + this.weaponName + ")";
   }
+
+  status(){
+    return this.name();
+  }
 }
 
 const basicAttacksByWeapon = {

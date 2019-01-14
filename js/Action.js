@@ -53,4 +53,8 @@ export default class Action {
   name(){
     throw "abstract method";
   }
+
+  status(){
+    throw "abstract method";
+  }
 }

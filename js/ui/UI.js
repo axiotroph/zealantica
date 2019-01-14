@@ -114,10 +114,12 @@ export default class UIPlayer extends Player{
 
   actionHover(tile){
     console.log("hovering");
+    this.rightText.text = tile.action.status();
   }
 
   actionUnHover(tile){
     console.log("unhovering");
+    this.rightText.text = "";
   }
 
   onTileClick(){}
@@ -167,7 +169,8 @@ export default class UIPlayer extends Player{
       });
 
       let cancelAction = {
-        texture: 'assets/cancel.png'
+        texture: 'assets/cancel.png',
+        status: function(){return "cancel"},
       }
       this.actionTiles.push(new ActionTile(this, cancelAction, index));
 
