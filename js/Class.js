@@ -1,11 +1,12 @@
 import attacks from "./BasicAttacks.js";
+import spells from "./Spells.js";
 
 class Class {
-  constructor(texture, name, basicAttack, stats, tags){
+  constructor(texture, name, abilities, stats, tags){
     this.texture = texture;
     this.name = name;
     this.stats = stats;
-    this.basicAttack = basicAttack;
+    this.abilities = abilities;
     this.tags = tags;
   }
 }
@@ -14,7 +15,7 @@ const classes = {
   "swordsman" : new Class(
     "assets/sword.png",
     "Swordsman",
-    attacks.sword,
+    [attacks.sword, spells.flame_sword],
     {
       'atk': 100,
       'def': 150,
@@ -31,7 +32,7 @@ const classes = {
   "axeman" : new Class(
     "assets/axe.png",
     "Axeman",
-    attacks.axe,
+    [attacks.axe],
     {
       'atk': 125,
       'def': 125,
@@ -48,7 +49,7 @@ const classes = {
   "spearman" : new Class(
     "assets/spear.png",
     "Spearman",
-    attacks.spear,
+    [attacks.spear],
     {
       'atk': 150,
       'def': 115,
@@ -65,7 +66,7 @@ const classes = {
   "gunner" : new Class(
     "assets/gun.png",
     "Gunner",
-    attacks.gun,
+    [attacks.gun],
     {
       'atk': 125,
       'def': 100,
@@ -82,7 +83,7 @@ const classes = {
   "archer" : new Class(
     "assets/bow.png",
     "Archer",
-    attacks.bow,
+    [attacks.bow],
     {
       'atk': 150,
       'def': 85,
@@ -99,7 +100,7 @@ const classes = {
   "artilleryman" : new Class(
     "assets/cannon.png",
     "Artilleryman",
-    attacks.cannon,
+    [attacks.cannon],
     {
       'atk': 75,
       'def': 115,
@@ -116,7 +117,7 @@ const classes = {
   "shaman" : new Class(
     "assets/staff.png",
     "Shaman",
-    attacks.staff,
+    [attacks.staff],
     {
       'atk': 80,
       'def': 100,
@@ -133,7 +134,7 @@ const classes = {
   "monk" : new Class(
     "assets/staff.png",
     "Monk",
-    attacks.staff,
+    [attacks.staff],
     {
       'atk': 110,
       'def': 110,

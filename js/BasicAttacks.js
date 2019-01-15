@@ -11,12 +11,9 @@ class BasicAttack extends Action{
   constructor(targetSpec, patternSpec, weaponName){
     super(targetSpec, patternSpec);
     this.weaponName = weaponName;
+    this.name = "basic attack (" + weaponName + ")";
     this.texture = "assets/attack.png";
     this.formulas['damage'] = new Formula(numbers.baseAttackDamage, 0, {'atk': 1}, 0, {'def': 1}, 0);
-  }
-
-  name(){
-    return "basic attack (" + this.weaponName + ")";
   }
 }
 

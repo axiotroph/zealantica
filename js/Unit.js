@@ -10,7 +10,7 @@ export default class Unit {
     this.x = x;
     this.y = y;
     this.id = newUID();
-    this.abilities = [this.clazz.basicAttack];
+    this.abilities = this.clazz.abilities;
 
     this.health = this.stats().maxHealth;
     this.ap = Math.floor(this.stats().ala * 0.5);

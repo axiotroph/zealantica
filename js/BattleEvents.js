@@ -19,6 +19,6 @@ export class Ability{
   }
 
   userString(){
-    return this.actor.name() + " uses " + this.ability.name() + " targeting " + this.target.name() + " doing stuff";
+    return this.actor.name() + " uses " + this.ability.name + " targeting " + this.target.name() + " doing stuff";
   }
 }

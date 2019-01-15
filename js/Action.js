@@ -10,6 +10,7 @@ export default class Action {
     this.apCost = 100;
     actions[this.id] = this;
     this.formulas = {};
+    this.name = "[default ability name]";
   }
 
   canTarget(actor, target, state){
@@ -68,13 +69,12 @@ export default class Action {
   unitPerform(actor, thisTarget, state, magnitude){
   }
 
-  name(){
-    throw "abstract method";
-  }
-
   status(){
     let result = [];
-    result.push(this.name());
+    result.push(this.name);
+    if(this.apCost > 0){
+      result.push("AP cost: " + this.apCost);
+    }
     for(let key in this.formulas){
       result.push(key + ": " + this.formulas[key].describe());
     }

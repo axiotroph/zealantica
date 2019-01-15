@@ -23,6 +23,7 @@ let pixiLoad = new Promise(resolve => {
     .add("assets/staff.png")
     .add("assets/attack.png")
     .add("assets/cancel.png")
+    .add("assets/flame_sword.png")
     .load(resolve);
 });
 
