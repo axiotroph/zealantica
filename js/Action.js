@@ -9,6 +9,7 @@ export default class Action {
     this.id = newUID();
     this.apCost = 100;
     actions[this.id] = this;
+    this.formulas = {};
   }
 
   canTarget(actor, target, state){
@@ -49,13 +50,22 @@ export default class Action {
       let unit = state.units[key];
       let magnitude = this.patternSpec(target, unit);
       if(this.willAffect(target, unit)){
+        this.unitCommonPerform(actor, unit, state, magnitude);
         this.unitPerform(actor, unit, state, magnitude);
       }
     };
   }
 
+  unitCommonPerform(actor, thisTarget, state, magnitude){
+    for(var key in this.formulas){
+      switch(key){
+        case "damage":
+          thisTarget.damage(this.formulas['damage'].compute(magnitude, actor, thisTarget));
+      }
+    }
+  }
+
   unitPerform(actor, thisTarget, state, magnitude){
-    throw "abstract method";
   }
 
   name(){
@@ -63,6 +73,11 @@ export default class Action {
   }
 
   status(){
-    throw "abstract method";
+    let result = [];
+    result.push(this.name());
+    for(let key in this.formulas){
+      result.push(key + ": " + this.formulas[key].describe());
+    }
+    return result.join("\n");
   }
 }
