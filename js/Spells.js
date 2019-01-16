@@ -11,6 +11,7 @@ class GenericSpell extends Action{
     this.name = name;
     this.apCost = ap;
     this.mpCost = mp;
+    this.tags.magic = true;
   }
 }
 
