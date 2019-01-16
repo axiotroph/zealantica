@@ -46,6 +46,10 @@ const patternSpecs = {
     }
   },
 
+  "all" : function(primaryTarget, thisTarget){
+    return 1;
+  },
+
   "column" : function(primaryTarget, thisTarget){
     return primaryTarget.x == thisTarget.x ? 1 : 0;
   },

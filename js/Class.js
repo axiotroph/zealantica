@@ -100,7 +100,7 @@ const classes = {
   "artilleryman" : new Class(
     "assets/cannon.png",
     "Artilleryman",
-    [attacks.cannon],
+    [attacks.cannon, spells.deep_insight],
     {
       'atk': 75,
       'def': 115,

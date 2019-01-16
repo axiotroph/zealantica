@@ -1,13 +1,15 @@
 import Action from "./Action.js";
 import Patterns from "./PatternSpec.js";
 import Targets from "./TargetSpec.js";
-import Formula from "./Formula.js";
+import {Formula, ConstantFormula} from "./Formula.js";
+import StatusTemplate from "./StatusTemplate.js";
 
 class GenericSpell extends Action{
-  constructor(targetSpec, patternSpec, name, texture, formulas, ap, mp){
+  constructor(targetSpec, patternSpec, name, texture, formulas, applies, ap, mp){
     super(targetSpec, patternSpec);
     this.texture = texture;
     this.formulas = formulas;
+    this.statuses = applies;
     this.name = name;
     this.apCost = ap;
     this.mpCost = mp;
@@ -22,6 +24,7 @@ const spells = {
       "Flame Sword",
       "assets/flame_sword.png",
       {'damage': new Formula(150, 0, {'atk': 0.6, 'int': 0.4}, 0, {'wis': 1})},
+      [],
       200,
       2),
 
@@ -31,6 +34,7 @@ const spells = {
       "Heal",
       "assets/heal.png",
       {'healing': new Formula(100, 0, {'int': 1}, 0, {'wis': 1}, true)},
+      [],
       200,
       2),
 
@@ -43,6 +47,7 @@ const spells = {
         'damage': new Formula(50, 0, {'atk': 0.5, 'int': 0.5}, 0, {'def': 1}),
         'ap mod': new Formula(-50, 50, {'int': 0.5}, 0, {'wis': 1}),
       },
+      [],
       200,
       2),
 
@@ -55,8 +60,25 @@ const spells = {
         'awaken': new Formula(2, 50, {'int': 0.5}, 100, {'wis': 0.1, 'ala': 0.1}, true),
         'ap mod': new Formula(5, 0, {'int': 1}, 0, {'wis': 1}, true),
       },
+      [],
       75,
       1),
+
+  'deep_insight': new GenericSpell(
+      Targets.enemy,
+      Patterns.all,
+      "Deep Insight",
+      "assets/deep_insight.png",
+      {},
+      [new StatusTemplate(
+        new Formula(2.5, 75, {'int': 0.25}, 75, {'wis': 0.25}),
+        {'def': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
+        {},
+        "Deep Insight"
+        )
+      ],
+      200,
+      2),
 }
 
 export default spells;

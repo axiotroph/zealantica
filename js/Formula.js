@@ -70,3 +70,17 @@ export default class Formula{
     return result;
   }
 }
+
+class ConstantFormula extends Formula{
+  constructor(constant){
+    super(constant, 1, {}, 1, {}, false);
+  }
+
+  describe(){
+    return ""+this.magnitude;
+  }
+
+}
+
+export {ConstantFormula, Formula}
+

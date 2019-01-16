@@ -1,0 +1,44 @@
+import Status from "./Status.js";
+
+export default class StatusTemplate{
+  constructor(duration, stats, tags, name){
+    this.duration = duration;
+    this.stats = stats;
+    this.tags = tags;
+    this.name = name;
+  }
+
+  compute(magnitude, actor, target){
+    let res = new Status();
+    res.duration = this.duration.compute(magnitude, actor, target);
+
+    for(var key in this.stats){
+      res.stats[key] = this.stats[key].compute(magnitude, actor, target);
+    }
+
+    for(var key in this.tags){
+      res.tags[key] = this.tags[key];
+    }
+
+    res.name = this.name;
+
+    return res;
+  }
+
+  describe(){
+    let res = this.name;
+    let comments = [];
+    comments.push("duration: " + this.duration.describe());
+    for(var key in this.stats){
+      comments.push(key + ": " + this.stats[key].describe());
+    }
+    let tags = [];
+    for(var key in this.tags){
+      tags.push(key);
+    }
+    if(tags.length > 0){
+      comments.push(tags.join("/"));
+    }
+    return res + "\n" + comments.map(x => "  " + x).join("\n");
+  }
+}

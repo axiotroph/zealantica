@@ -11,6 +11,7 @@ export default class Unit {
     this.y = y;
     this.id = newUID();
     this.abilities = this.clazz.abilities;
+    this.statuses = [];
 
     this.health = this.stats().maxHealth;
     this.ap = Math.floor(this.stats().ala * 0.5);
@@ -23,6 +24,10 @@ export default class Unit {
   clone(){
     let obj = Object.create(Unit.prototype);
     Object.assign(obj, this);
+
+    obj.statuses = [];
+    this.statuses.forEach(x => obj.statuses.push(x.clone()));
+
     return obj;
   }
 
@@ -38,6 +43,9 @@ export default class Unit {
       this.stunCounter = 0;
     }
     this.stunTripped = false;
+
+    this.statuses.forEach(x => x.tick(this));
+    this.statuses = this.statuses.filter(x => x.duration > 0);
   }
 
   couldAct(state){
@@ -115,10 +123,21 @@ export default class Unit {
     if(this.stunCounter > 0){
       result += ("\nCombo: " + this.stunCounter + "\n");
     }
+
     let stats = this.stats();
+    let baseStats = this.baseStats();
     for(let stat in stats){
-      result += "\n" + stat + ": " + stats[stat];
+      let statLine = stat + ": " + stats[stat];
+      if(stats[stat] != baseStats[stat]){
+        statLine += " (base " + baseStats[stat] + ")";
+      }
+      result += "\n" + statLine;
     }
+
+    result += "\n";
+
+    this.statuses.forEach(x => result += ("\nAffected by " + x.describe()));
+
     return result + this.debugInfo();
   }
 
@@ -126,9 +145,19 @@ export default class Unit {
     return this.clazz.name + "[" + this.id + "]";
   }
 
-  stats(){
+  baseStats(){
     let stats = Object.assign({}, this.clazz.stats);
     stats.maxHealth = stats.vit * 10;
+    return stats;
+  }
+
+  stats(){
+    let stats = this.baseStats();
+    this.statuses.forEach(x => {
+      for(var key in x.stats){
+        stats[key] += x.stats[key];
+      }
+    });
     return stats;
   }
 

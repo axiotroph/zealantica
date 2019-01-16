@@ -10,6 +10,7 @@ export default class Action {
     this.apCost = 100;
     actions[this.id] = this;
     this.formulas = {};
+    this.statuses = [];
     this.tags = {};
     this.name = "[default ability name]";
   }
@@ -75,6 +76,11 @@ export default class Action {
       }
     }
 
+    this.statuses.forEach(x => {
+      let computed = x.compute(magnitude, actor, thisTarget);
+      thisTarget.statuses.push(computed);
+    });
+
     if(this.tags.physical){
       thisTarget.triggerStun();
     }
@@ -93,6 +99,9 @@ export default class Action {
     for(let key in this.formulas){
       result.push(key + ": " + this.formulas[key].describe());
     }
+
+    this.statuses.forEach(x =>
+        result.push("Applies " + x.describe()));
 
     let tags = [];
     for(let key in this.tags){
