@@ -1,4 +1,10 @@
 const targetSpecs = {
+  "notTag" : function(tag){
+    return function(actor, target, game){
+      return !target.statusTags()[tag];
+    }
+  },
+
   "free" : function(actor, target, game){
     return true;
   },

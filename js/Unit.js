@@ -178,6 +178,7 @@ export default class Unit {
       + "\nID: " + this.id
       + "\nx: " + this.x
       + "\ny: " + this.y
+      + "\nstatus: " + JSON.stringify(this.statusTags())
       ;
   }
 }

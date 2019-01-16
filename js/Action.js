@@ -65,6 +65,10 @@ export default class Action {
   }
 
   unitCommonPerform(actor, thisTarget, state, magnitude){
+    if(this.tags.magic && thisTarget.statusTags()['magic immune']){
+      return;
+    }
+
     for(var key in this.formulas){
       switch(key){
         case "damage":
@@ -79,6 +83,10 @@ export default class Action {
         case "awaken":
           thisTarget.awaken(this.formulas.awaken.compute(magnitude, actor, thisTarget));
       }
+    }
+
+    if(this.tags.dispel){
+      thisTarget.statuses = thisTarget.statuses.filter(x => !x.tags.magic);
     }
 
     this.statuses.forEach(x => {
@@ -115,7 +123,7 @@ export default class Action {
       }
     }
     if(tags.length > 0){
-      result.push(tags.join(','));
+      result.push(tags.join('/'));
     }
 
     return result.join("\n");

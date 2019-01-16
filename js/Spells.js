@@ -5,14 +5,15 @@ import {Formula, ConstantFormula} from "./Formula.js";
 import StatusTemplate from "./StatusTemplate.js";
 
 class GenericSpell extends Action{
-  constructor(targetSpec, patternSpec, name, texture, formulas, applies, ap, mp){
-    super(targetSpec, patternSpec);
+  constructor(targetSpec, patternSpec, name, texture, formulas, applies, ap, mp, tags = {}){
+    super(Targets.and(targetSpec, Targets.notTag('magic immune')), patternSpec);
     this.texture = texture;
     this.formulas = formulas;
     this.statuses = applies;
     this.name = name;
     this.apCost = ap;
     this.mpCost = mp;
+    this.tags = tags;
     this.tags.magic = true;
   }
 }
@@ -73,7 +74,7 @@ const spells = {
       [new StatusTemplate(
         new Formula(1.5, 75, {'int': 0.25}, 75, {'wis': 0.25}),
         {'def': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
-        {},
+        {'magic': true},
         "Deep Insight"
         )
       ],
@@ -89,7 +90,7 @@ const spells = {
       [new StatusTemplate(
         new ConstantFormula(2),
         {'wis': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
-        {'stun': true},
+        {'stun': true, 'magic': true},
         "Freezing Axe"
         )
       ],
@@ -107,14 +108,29 @@ const spells = {
       [new StatusTemplate(
         new ConstantFormula(2),
         {},
-        {'silence': true},
+        {'silence': true, 'magic': true},
         "Silence"
         )
       ],
       200,
       3),
 
-  'holy_guard': null,
+  'holy_guard': new GenericSpell(
+      Targets.ally,
+      Patterns.row,
+      "Holy Guard",
+      "assets/holy_guard.png",
+      {},
+      [new StatusTemplate(
+        new ConstantFormula(2),
+        {'def': new Formula(30, 0, {'int': 1}, 0, {'wis': 1}, true)},
+        {'magic immune': true, 'magic': true},
+        "Holy Guard",
+        )
+      ],
+      150,
+      2,
+      {'dispel': true}),
 }
 
 export default spells;
