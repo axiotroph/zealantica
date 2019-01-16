@@ -32,6 +32,8 @@ let pixiLoad = new Promise(resolve => {
     .add("assets/lightning_spear.png")
     .add("assets/silence.png")
     .add("assets/wild_shot.png")
+    .add("assets/swap.png")
+    .add("assets/guard.png")
     .load(resolve);
 });
 
@@ -324,6 +326,8 @@ class UnitTile extends BorderedTile {
     this.scaleyRatio = (this.scaley / this.targetDimensions.height);
     this.scalexRatio = (this.scalex / this.targetDimensions.width);
 
+    this.setPosition();
+
     ui.formations[this.unitState().player].addChild(this.sprite);
 
     this.healthBar = new PIXI.Graphics();
@@ -334,8 +338,6 @@ class UnitTile extends BorderedTile {
 		this.healthBar.y = this.scaleyRatio * (this.targetDimensions.height - frame.healthHeight);
     this.sprite.addChild(this.healthBar);
 
-    this.sprite.x = this.targetDimensions.x;
-    this.sprite.y = this.targetDimensions.y;
     this.sprite.height = this.targetDimensions.height;
     this.sprite.width = this.targetDimensions.width;
 
@@ -357,11 +359,19 @@ class UnitTile extends BorderedTile {
 
   }
 
+  setPosition(){
+    this.targetDimensions = frame.units[this.unitState().player][this.unitState().x][this.unitState().y];
+
+    this.sprite.x = this.targetDimensions.x;
+    this.sprite.y = this.targetDimensions.y;
+  }
+
   unitState(){
     return this.battle.state.units[this.unitID];
   }
 
   update(){
+    this.setPosition();
     this.showAvailableBorder(this.unitState().canAct(this.battle.state));
     this.healthBar.width = this.baseSpriteDimensions.width * (this.unitState().health / this.unitState().stats().maxHealth);
   }

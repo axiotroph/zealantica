@@ -17,6 +17,14 @@ const targetSpecs = {
     return actor.player == target.player && target.isAlive();
   },
 
+  "self" : function(actor, target, game){
+    return actor.id == target.id;
+  },
+
+  "notSelf" : function(actor, target, game){
+    return actor.id != target.id;
+  },
+
   "front" : function(actor, target, game){
     let walk = 2;
     while(walk != target.y){

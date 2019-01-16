@@ -1,5 +1,4 @@
 Progress:
-  Implement generic actions (guard, swap)
   Surface more player log info (battle events, which also lead to animations)
     this is needed for balance, hiding the numbers sucks
   Seek feedback

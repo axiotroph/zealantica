@@ -13,6 +13,7 @@ export default class Action {
     this.formulas = {};
     this.statuses = [];
     this.tags = {};
+    this.consumesActivation = true;
     this.name = "[default ability name]";
   }
 
@@ -57,7 +58,9 @@ export default class Action {
   perform(actor, target, state){
     this.validate(actor, target, state);
 
-    state.activationsRemaining--;
+    if(this.consumesActivation){
+      state.activationsRemaining--;
+    }
     actor.ap -= this.apCost;
     actor.mcp -= this.mcpCost;
 
@@ -80,6 +83,9 @@ export default class Action {
       switch(key){
         case "damage":
           thisTarget.damage(this.formulas.damage.compute(magnitude, actor, thisTarget));
+          if(this.tags.physical){
+            thisTarget.triggerStun();
+          }
           break;
         case "healing":
           thisTarget.heal(this.formulas.healing.compute(magnitude, actor, thisTarget));
@@ -101,9 +107,6 @@ export default class Action {
       thisTarget.statuses.push(computed);
     });
 
-    if(this.tags.physical){
-      thisTarget.triggerStun();
-    }
   }
 
   unitPerform(actor, thisTarget, state, magnitude){

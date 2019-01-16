@@ -1,4 +1,5 @@
 import attacks from "./BasicAttacks.js";
+import {guard, swap} from "./BasicActions.js";
 import spells from "./Spells.js";
 
 class Class {
@@ -8,6 +9,8 @@ class Class {
     this.stats = stats;
     this.abilities = abilities;
     this.tags = tags;
+    this.abilities.push(guard);
+    this.abilities.push(swap);
   }
 }
 

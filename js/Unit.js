@@ -55,7 +55,7 @@ export default class Unit {
     if(state == undefined){
       throw "state required";
     }
-    return this.ap > 100 && this.isAlive() && !this.isStunned();
+    return this.ap > 100 && this.isAlive() && !this.isStunned() && !this.isGuarding();
   }
 
   canAct(state){
@@ -71,6 +71,10 @@ export default class Unit {
 
   isStunned(){
     return this.stunnedTime > 0 || this.statusTags().stun;
+  }
+
+  isGuarding(){
+    return this.statusTags().guard;
   }
 
   awaken(amount){

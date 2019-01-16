@@ -50,3 +50,4 @@ const basicAttacksByWeapon = {
 }
 
 export default basicAttacksByWeapon;
+
