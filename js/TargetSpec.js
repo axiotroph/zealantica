@@ -22,6 +22,23 @@ const targetSpecs = {
     return true;
   },
 
+  "firstTwo": function(actor, target, game){
+    let walk = 2;
+    let skip = 1;
+    while(walk != target.y){
+      if(game.unitByPosition(target.x, walk, target.player).isAlive()){
+        skip--;
+        if(skip < 0){
+          return false;
+        }
+        walk--;
+      }
+
+    }
+    return true;
+  },
+
+
   "and" : function(f, g){
     return function(actor, target, game){
       return f(actor, target, game) && g(actor, target, game);

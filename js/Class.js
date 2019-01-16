@@ -32,7 +32,7 @@ const classes = {
   "axeman" : new Class(
     "assets/axe.png",
     "Axeman",
-    [attacks.axe],
+    [attacks.axe, spells.freezing_axe],
     {
       'atk': 125,
       'def': 125,
@@ -83,7 +83,7 @@ const classes = {
   "archer" : new Class(
     "assets/bow.png",
     "Archer",
-    [attacks.bow],
+    [attacks.bow, spells.silence],
     {
       'atk': 150,
       'def': 85,

@@ -57,7 +57,7 @@ const spells = {
       "Awakening",
       "assets/awakening.png",
       {
-        'awaken': new Formula(2, 50, {'int': 0.5}, 100, {'wis': 0.1, 'ala': 0.1}, true),
+        'awaken': new Formula(2.25, 50, {'int': 0.5}, 100, {'wis': 0.1, 'ala': 0.1}, true),
         'ap mod': new Formula(5, 0, {'int': 1}, 0, {'wis': 1}, true),
       },
       [],
@@ -71,7 +71,7 @@ const spells = {
       "assets/deep_insight.png",
       {},
       [new StatusTemplate(
-        new Formula(2.5, 75, {'int': 0.25}, 75, {'wis': 0.25}),
+        new Formula(1.5, 75, {'int': 0.25}, 75, {'wis': 0.25}),
         {'def': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
         {},
         "Deep Insight"
@@ -79,6 +79,42 @@ const spells = {
       ],
       200,
       2),
+
+  'freezing_axe': new GenericSpell(
+      Targets.and(Targets.enemy, Targets.front),
+      Patterns.row,
+      "Freezing Axe",
+      "assets/freezing_axe.png",
+      {},
+      [new StatusTemplate(
+        new ConstantFormula(2),
+        {'wis': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
+        {'stun': true},
+        "Freezing Axe"
+        )
+      ],
+      200,
+      3),
+
+  'silence': new GenericSpell(
+      Targets.and(Targets.enemy, Targets.firstTwo),
+      Patterns.row,
+      "Silence",
+      "assets/silence.png",
+      {
+        'damage': new Formula(30, 0, {'int': 1}, 0, {'wis': 1})
+      },
+      [new StatusTemplate(
+        new ConstantFormula(2),
+        {},
+        {'silence': true},
+        "Silence"
+        )
+      ],
+      200,
+      3),
+
+  'holy_guard': null,
 }
 
 export default spells;

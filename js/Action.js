@@ -23,7 +23,12 @@ export default class Action {
     return this.patternSpec(target, secondTarget) > 0 && target.player == secondTarget.player;
   }
 
-  canActivate(actor, state){
+  canActivate(actor){
+    if(this.tags.magic){
+      if(actor.statusTags().silence){
+        return false;
+      }
+    }
     return true;
   }
 

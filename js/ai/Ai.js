@@ -42,6 +42,9 @@ class Ai extends Player{
 
       for(var actionKey in actor.abilities){
         let action = actor.abilities[actionKey];
+        if(!action.canActivate(actor)){
+          continue;
+        }
         for(var targetKey in battle.state.units){
           let target = battle.state.units[targetKey];
           if(action.canTarget(actor, target, battle.state)){

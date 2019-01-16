@@ -175,10 +175,10 @@ export default class UIPlayer extends Player{
       let selectedActionTile = null;
 
       turnData.actor.abilities.forEach(action => {
-        let tile = new ActionTile(this, action, index, this.battle);
+        let tile = new ActionTile(this, action, index, turnData.actor, this.battle);
         this.actionTiles.push(tile);
         tile.onClick = function(){
-          if(tile.action.canActivate(turnData.actor, this.battle.state)){
+          if(tile.action.canActivate(turnData.actor)){
             selectedActionTile.showSelectBorder(false);
 
             selectedActionTile = tile;
@@ -202,7 +202,7 @@ export default class UIPlayer extends Player{
         canActivate: function(){return true},
       }
 
-      let cancelTile = new ActionTile(this, cancelAction, index, this.battle);
+      let cancelTile = new ActionTile(this, cancelAction, index, turnData.actor, this.battle);
       cancelTile.onClick = function(){
         turnData.actorTile.showSelectBorder(false);
         cleanupActionTiles();
@@ -261,7 +261,7 @@ class BorderedTile {
 }
 
 class ActionTile extends BorderedTile{
-  constructor(ui, action, index, battle){
+  constructor(ui, action, index, actor, battle){
     super();
     this.ui = ui;
     this.action = action;
@@ -291,7 +291,7 @@ class ActionTile extends BorderedTile{
     this.sprite.interactive = true;
 
     this.sprite.on('mouseover', (e) => {
-      this.showIndicatorBorder(this.action.canActivate(this.actor, this.battle.state));
+      this.showIndicatorBorder(this.action.canActivate(actor));
       this.ui.actionHover(this);
     });
 

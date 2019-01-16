@@ -67,7 +67,7 @@ export default class Unit {
   }
 
   isStunned(){
-    return this.stunnedTime > 0;
+    return this.stunnedTime > 0 || this.statusTags().stun;
   }
 
   awaken(amount){
@@ -159,6 +159,18 @@ export default class Unit {
       }
     });
     return stats;
+  }
+
+  statusTags(){
+    let result = {};
+    this.statuses.forEach(x => {
+      for(var key in x.tags){
+        if(x.tags[key]){
+          result[key] = true;
+        }
+      }
+    });
+    return result;
   }
 
   debugInfo(){

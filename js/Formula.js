@@ -27,7 +27,7 @@ export default class Formula{
       defense = (numbers.statBase**2)/defense;
     }
 
-    return Math.floor(damage * offense / defense);
+    return Math.round(damage * offense / defense);
   }
 
   describeOff(){
