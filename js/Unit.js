@@ -1,4 +1,5 @@
 import newUID from "./UID.js";
+import numbers from "./Balance.js";
 
 import Log from "./Log.js";
 let log = Log("unit");
@@ -15,6 +16,7 @@ export default class Unit {
 
     this.health = this.stats().maxHealth;
     this.ap = Math.floor(this.stats().ala * 0.5);
+    this.mcp = 0;
 
     this.stunTripped = false;
     this.stunnedTime = 0;
@@ -33,6 +35,7 @@ export default class Unit {
 
   nextTurn(){
     this.ap += this.stats().ala;
+    this.mcp = Math.min(numbers.maxMCP, this.mcp+1);
 
     if(this.stunnedTime == 1){
       log.info(this.name() + " recovers from stun");
@@ -116,6 +119,7 @@ export default class Unit {
       this.name() 
       + "\nHealth: " + this.health
       + "\nAP: " + this.ap
+      + "\nMCP: " + this.mcp
       + "\n";
     if(this.stunnedTime > 0){
       result += ("\nStunned: " + this.stunnedTime + "\n");

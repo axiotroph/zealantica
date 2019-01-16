@@ -12,7 +12,7 @@ class GenericSpell extends Action{
     this.statuses = applies;
     this.name = name;
     this.apCost = ap;
-    this.mpCost = mp;
+    this.mcpCost = mp;
     this.tags = tags;
     this.tags.magic = true;
   }

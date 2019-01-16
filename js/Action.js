@@ -8,6 +8,7 @@ export default class Action {
     this.patternSpec = patternSpec;
     this.id = newUID();
     this.apCost = 100;
+    this.mcpCost = 0;
     actions[this.id] = this;
     this.formulas = {};
     this.statuses = [];
@@ -29,6 +30,11 @@ export default class Action {
         return false;
       }
     }
+
+    if(actor.mcp < this.mcpCost){
+      return false;
+    }
+
     return true;
   }
 
@@ -53,6 +59,7 @@ export default class Action {
 
     state.activationsRemaining--;
     actor.ap -= this.apCost;
+    actor.mcp -= this.mcpCost;
 
     for(let key in state.units){
       let unit = state.units[key];
@@ -107,6 +114,7 @@ export default class Action {
     result.push(this.name);
     if(this.apCost > 0){
       result.push("AP cost: " + this.apCost);
+      result.push("MCP cost: " + this.mcpCost);
     }
 
     for(let key in this.formulas){
