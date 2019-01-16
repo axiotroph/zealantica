@@ -61,7 +61,11 @@ export default class Action {
     for(var key in this.formulas){
       switch(key){
         case "damage":
-          thisTarget.damage(this.formulas['damage'].compute(magnitude, actor, thisTarget));
+          thisTarget.damage(this.formulas.damage.compute(magnitude, actor, thisTarget));
+          break;
+        case "healing":
+          thisTarget.heal(this.formulas.healing.compute(magnitude, actor, thisTarget));
+          break;
       }
     }
   }

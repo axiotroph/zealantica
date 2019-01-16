@@ -1,10 +1,13 @@
+import numbers from "./Balance.js";
+
 export default class Formula{
-  constructor(magnitude, flatOffense, offenseScales, flatDefense, defenseScales){
+  constructor(magnitude, flatOffense, offenseScales, flatDefense, defenseScales, friendly = 0){
     this.magnitude = magnitude;
     this.flatOffense = flatOffense;
     this.flatDefense = flatDefense;
     this.offenseScales = offenseScales;
     this.defenseScales = defenseScales;
+    this.friendly = friendly;
   }
 
   compute(magnitude, actor, target){
@@ -18,6 +21,10 @@ export default class Formula{
 
     for(var key in this.defenseScales){
       defense += this.defenseScales[key] * target.stats()[key];
+    }
+
+    if(this.friendly){
+      defense = (numbers.statBase**2)/defense;
     }
 
     return Math.floor(damage * offense / defense);
@@ -56,6 +63,11 @@ export default class Formula{
   }
 
   describe(){
-    return "" + this.magnitude + " [" + this.describeOff() + " vs " + this.describeDef() + "]";
+    console.dir(this);
+    let result = "" + this.magnitude + " [" + this.describeOff() + " vs " + this.describeDef() + "]";
+    if(this.friendly){
+      result += " (friendly)";
+    }
+    return result;
   }
 }

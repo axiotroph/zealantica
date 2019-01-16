@@ -24,6 +24,14 @@ let pixiLoad = new Promise(resolve => {
     .add("assets/attack.png")
     .add("assets/cancel.png")
     .add("assets/flame_sword.png")
+    .add("assets/awakening.png")
+    .add("assets/deep_insight.png")
+    .add("assets/freezing_axe.png")
+    .add("assets/heal.png")
+    .add("assets/holy_guard.png")
+    .add("assets/lightning_spear.png")
+    .add("assets/silence.png")
+    .add("assets/wild_shot.png")
     .load(resolve);
 });
 

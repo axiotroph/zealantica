@@ -84,6 +84,14 @@ export default class Unit {
     }
   }
 
+  heal(amount){
+    if(!this.isAlive()){
+      return;
+    }
+
+    this.health = Math.min(this.health + amount, this.stats().maxHealth);
+  }
+
   status(){
     let result = 
       this.name() 

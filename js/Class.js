@@ -117,7 +117,7 @@ const classes = {
   "shaman" : new Class(
     "assets/staff.png",
     "Shaman",
-    [attacks.staff],
+    [attacks.staff, spells.heal],
     {
       'atk': 80,
       'def': 100,

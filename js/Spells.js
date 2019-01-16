@@ -20,7 +20,16 @@ const spells = {
       Patterns.single,
       "Flame Sword",
       "assets/flame_sword.png",
-      {'damage': new Formula(150, 0, {'atk': 0.6, 'int': 0.4}, 0, {'wis': 1}, 0)},
+      {'damage': new Formula(150, 0, {'atk': 0.6, 'int': 0.4}, 0, {'wis': 1})},
+      200,
+      2),
+
+  'heal': new genericSpell(
+      Targets.ally,
+      Patterns.row,
+      "Heal",
+      "assets/heal.png",
+      {'healing': new Formula(100, 0, {'int': 1}, 0, {'wis': 1}, true)},
       200,
       2),
 }
