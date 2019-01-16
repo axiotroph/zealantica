@@ -10,6 +10,7 @@ export default class Action {
     this.apCost = 100;
     actions[this.id] = this;
     this.formulas = {};
+    this.tags = {};
     this.name = "[default ability name]";
   }
 
@@ -66,10 +67,16 @@ export default class Action {
         case "healing":
           thisTarget.heal(this.formulas.healing.compute(magnitude, actor, thisTarget));
           break;
-        case "ap damage":
-          thisTarget.ap -= this.formulas['ap damage'].compute(magnitude, actor, thisTarget);
+        case "ap mod":
+          thisTarget.ap += this.formulas['ap mod'].compute(magnitude, actor, thisTarget);
           break;
+        case "awaken":
+          thisTarget.awaken(this.formulas.awaken.compute(magnitude, actor, thisTarget));
       }
+    }
+
+    if(this.tags.physical){
+      thisTarget.triggerStun();
     }
   }
 
@@ -82,9 +89,21 @@ export default class Action {
     if(this.apCost > 0){
       result.push("AP cost: " + this.apCost);
     }
+
     for(let key in this.formulas){
       result.push(key + ": " + this.formulas[key].describe());
     }
+
+    let tags = [];
+    for(let key in this.tags){
+      if(this.tags[key]){
+        tags.push(key);
+      }
+    }
+    if(tags.length > 0){
+      result.push(tags.join(','));
+    }
+
     return result.join("\n");
   }
 }

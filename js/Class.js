@@ -134,7 +134,7 @@ const classes = {
   "monk" : new Class(
     "assets/staff.png",
     "Monk",
-    [attacks.staff],
+    [attacks.staff, spells.awakening],
     {
       'atk': 110,
       'def': 110,

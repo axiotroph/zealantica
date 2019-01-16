@@ -62,6 +62,15 @@ export default class Unit {
     return this.stunnedTime > 0;
   }
 
+  awaken(amount){
+    if(!this.isAlive()){
+      return;
+    }
+
+    this.stunCounter = Math.max(0, this.stunCounter - amount);
+    this.stunnedTime = Math.max(0, this.stunnedTime - amount);
+  }
+
   damage(amount){
     if(!this.isAlive()){
       return;
@@ -72,7 +81,9 @@ export default class Unit {
       log.info(this.name() + " dies!");
       return;
     }
+  }
 
+  triggerStun(){
     if(!this.stunTripped){
       this.stunTripped = true;
       this.stunCounter++;

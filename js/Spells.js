@@ -40,10 +40,22 @@ const spells = {
       "assets/lightning_spear.png",
       {
         'damage': new Formula(50, 0, {'atk': 0.5, 'int': 0.5}, 0, {'def': 1}),
-        'ap damage': new Formula(50, 0.5, {'int': 0.5}, 0, {'wis': 1}),
+        'ap mod': new Formula(-50, 50, {'int': 0.5}, 0, {'wis': 1}),
       },
       200,
       2),
+
+  'awakening': new GenericSpell(
+      Targets.ally,
+      Patterns.cross,
+      "Awakening",
+      "assets/awakening.png",
+      {
+        'awaken': new Formula(2, 50, {'int': 0.5}, 100, {'wis': 0.1, 'ala': 0.1}, true),
+        'ap mod': new Formula(5, 0, {'int': 1}, 0, {'wis': 1}, true),
+      },
+      75,
+      1),
 }
 
 export default spells;

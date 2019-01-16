@@ -14,6 +14,7 @@ class BasicAttack extends Action{
     this.name = "basic attack (" + weaponName + ")";
     this.texture = "assets/attack.png";
     this.formulas['damage'] = new Formula(numbers.baseAttackDamage, 0, {'atk': 1}, 0, {'def': 1}, 0);
+    this.tags.physical = true;
   }
 }
 

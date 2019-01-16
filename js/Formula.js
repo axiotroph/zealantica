@@ -63,7 +63,6 @@ export default class Formula{
   }
 
   describe(){
-    console.dir(this);
     let result = "" + this.magnitude + " [" + this.describeOff() + " vs " + this.describeDef() + "]";
     if(this.friendly){
       result += " (friendly)";
