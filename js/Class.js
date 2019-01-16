@@ -49,7 +49,7 @@ const classes = {
   "spearman" : new Class(
     "assets/spear.png",
     "Spearman",
-    [attacks.spear],
+    [attacks.spear, spells.lightning_spear],
     {
       'atk': 150,
       'def': 115,

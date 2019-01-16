@@ -66,6 +66,9 @@ export default class Action {
         case "healing":
           thisTarget.heal(this.formulas.healing.compute(magnitude, actor, thisTarget));
           break;
+        case "ap damage":
+          thisTarget.ap -= this.formulas['ap damage'].compute(magnitude, actor, thisTarget);
+          break;
       }
     }
   }
