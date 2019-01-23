@@ -1,4 +1,5 @@
 import newUID from "./UID.js";
+import {Ability as AbilityEvent, StatusAppliedEffect as StatusEvent, NumericalModEvent as ModEvent} from "./BattleEvents.js";
 
 export const actions = {};
 
@@ -64,14 +65,20 @@ export default class Action {
     actor.ap -= this.apCost;
     actor.mcp -= this.mcpCost;
 
+    let effects = [];
+
     for(let key in state.units){
       let unit = state.units[key];
       let magnitude = this.patternSpec(target, unit);
       if(this.willAffect(target, unit)){
-        this.unitCommonPerform(actor, unit, state, magnitude);
-        this.unitPerform(actor, unit, state, magnitude);
+        effects.push(this.unitCommonPerform(actor, unit, state, magnitude));
+        effects.push(this.unitPerform(actor, unit, state, magnitude));
       }
     };
+
+    //TODO: apply all the events here (for now)
+
+    return new AbilityEvent(this, actor, target, effects.flatten());
   }
 
   unitCommonPerform(actor, thisTarget, state, magnitude){
