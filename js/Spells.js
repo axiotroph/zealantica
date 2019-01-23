@@ -75,6 +75,7 @@ const spells = {
         new Formula(1.5, 75, {'int': 0.25}, 75, {'wis': 0.25}),
         {'def': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
         {'magic': true},
+        {},
         "Deep Insight"
         )
       ],
@@ -90,7 +91,8 @@ const spells = {
       [new StatusTemplate(
         new ConstantFormula(2),
         {'wis': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
-        {'stun': true, 'magic': true},
+        {'magic': true},
+        {'stun': true},
         "Freezing Axe"
         )
       ],
@@ -108,7 +110,8 @@ const spells = {
       [new StatusTemplate(
         new ConstantFormula(2),
         {},
-        {'silence': true, 'magic': true},
+        {'magic': true},
+        {'silence': true},
         "Silence"
         )
       ],
@@ -124,7 +127,8 @@ const spells = {
       [new StatusTemplate(
         new ConstantFormula(2),
         {'def': new Formula(30, 0, {'int': 1}, 0, {'wis': 1}, true)},
-        {'magic immune': true, 'magic': true},
+        {'magic': true},
+        {'magic immune': true},
         "Holy Guard",
         )
       ],

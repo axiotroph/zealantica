@@ -1,10 +1,11 @@
 import Status from "./Status.js";
 
 export default class StatusTemplate{
-  constructor(duration, stats, tags, name){
+  constructor(duration, stats, tags, applies, name){
     this.duration = duration;
     this.stats = stats;
     this.tags = tags;
+    this.applies = applies;
     this.name = name;
   }
 
@@ -14,6 +15,10 @@ export default class StatusTemplate{
 
     for(var key in this.stats){
       res.stats[key] = this.stats[key].compute(magnitude, actor, target);
+    }
+
+    for(var key in this.applies){
+      res.applies[key] = this.applies[key];
     }
 
     for(var key in this.tags){
@@ -26,11 +31,17 @@ export default class StatusTemplate{
   }
 
   describe(){
-    let res = this.name;
     let comments = [];
     comments.push("duration: " + this.duration.describe());
     for(var key in this.stats){
       comments.push(key + ": " + this.stats[key].describe());
+    }
+    let applies = [];
+    for(var key in this.applies){
+      applies.push(key);
+    }
+    if(applies.length > 0){
+      comments.push(applies.join("/"));
     }
     let tags = [];
     for(var key in this.tags){
@@ -39,6 +50,6 @@ export default class StatusTemplate{
     if(tags.length > 0){
       comments.push(tags.join("/"));
     }
-    return res + "\n" + comments.map(x => "  " + x).join("\n");
+    return comments.map(x => "  " + x).join("\n");
   }
 }

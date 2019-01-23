@@ -14,7 +14,8 @@ class Guard extends Action{
       new StatusTemplate(
           new ConstantFormula(1),
           {'def': new ConstantFormula(numbers.guardMagnitude)},
-          {'guard': true, 'physical': true},
+          {'physical': true},
+          {'guard': true},
           "Guarding")];
     this.tags = {'physical': true};
     this.consumesActivation = false;

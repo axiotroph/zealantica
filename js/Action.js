@@ -125,7 +125,7 @@ export default class Action {
     }
 
     this.statuses.forEach(x =>
-        result.push("Applies " + x.describe()));
+        result.push("Applies '" + x.name + "':\n" + x.describe()));
 
     let tags = [];
     for(let key in this.tags){

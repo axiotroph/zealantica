@@ -172,8 +172,8 @@ export default class Unit {
   statusTags(){
     let result = {};
     this.statuses.forEach(x => {
-      for(var key in x.tags){
-        if(x.tags[key]){
+      for(var key in x.applies){
+        if(x.applies[key]){
           result[key] = true;
         }
       }
