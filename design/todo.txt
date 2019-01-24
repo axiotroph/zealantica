@@ -1,6 +1,6 @@
 Progress:
-  Surface more player log info (battle events, which also lead to animations)
-    this is needed for balance, hiding the numbers sucks
+  switch abilites over into returning events instead of applying directly to the unitstate
+      Needed for animations and logs
   Seek feedback
   UI Animations
   Randomness

@@ -1,5 +1,5 @@
 import newUID from "./UID.js";
-import {Ability as AbilityEvent, StatusAppliedEffect as StatusEvent, NumericalModEvent as ModEvent} from "./BattleEvents.js";
+import {Ability as AbilityEvent, StatusAppliedEvent as StatusEvent, NumericalModEvent as ModEvent} from "./BattleEvents.js";
 
 export const actions = {};
 
@@ -78,7 +78,8 @@ export default class Action {
 
     //TODO: apply all the events here (for now)
 
-    return new AbilityEvent(this, actor, target, effects.flatten());
+    //effects = effects.flatten();
+    //return new AbilityEvent(this, actor, target, effects);
   }
 
   unitCommonPerform(actor, thisTarget, state, magnitude){

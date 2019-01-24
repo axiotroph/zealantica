@@ -77,7 +77,7 @@ export default class BattleState{
   initFromPrior(prior, turn){
     this.clonePrior(prior);
     let abilityEvent = turn.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this);
-    this.events.push(new AbilityEvent(turn.action, turn.actor, turn.target, null));
+    //this.events.push(new AbilityEvent(turn.action, turn.actor, turn.target, null));
     this.endTurnChecks();
   }
 
