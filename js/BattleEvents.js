@@ -1,4 +1,4 @@
-export class NextTurn{
+export class NextTurnEvent{
   constructor(turn){
     this.type = "nextTurn";
     this.turn = turn;
@@ -9,7 +9,7 @@ export class NextTurn{
   }
 }
 
-export class Ability{
+export class AbilityEvent{
   constructor(ability, actor, target, effects){
     this.type = "ability";
     this.ability = ability;
@@ -23,24 +23,50 @@ export class Ability{
   }
 }
 
-export class StatusAppliedEvent{
+export class StatusAppliedEffect{
   constructor(target, status){
     this.target = target;
     this.status = status;
   }
 }
 
-export class NumericalModEvent{
-  constructor(target, type, amount){
+export class NumericalModEffect{
+  constructor(target, amount){
     this.target = target;
-    this.type = type;
     this.amount = amount;
   }
 }
 
-export class EffectAppliedEvent{
-  constructor(target, type){
+export class SimpleEffectAppliedEffect{
+  constructor(target){
     this.target = target;
-    this.type = type;
   }
+}
+
+export class StatusDispelledEffect{
+  constructor(target, status){
+    this.target = target;
+    this.status = status;
+  }
+}
+
+export class DamageEffect extends NumericalModEffect{
+}
+
+export class HealEffect extends NumericalModEffect{
+}
+
+export class APModEffect extends NumericalModEffect{
+}
+
+export class MCPModEffect extends NumericalModEffect{
+}
+
+export class AwakenEffect extends NumericalModEffect{
+}
+
+export class StunTriggeredEffect extends SimpleEffectAppliedEffect{
+}
+
+export class ConsumeActivationEffect{
 }

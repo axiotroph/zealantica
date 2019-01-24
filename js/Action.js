@@ -1,5 +1,5 @@
 import newUID from "./UID.js";
-import {Ability as AbilityEvent, StatusAppliedEvent as StatusEvent, NumericalModEvent as ModEvent} from "./BattleEvents.js";
+import {AbilityEvent, StatusAppliedEvent, NumericalModEvent, EffectAppliedEvent} from "./BattleEvents.js";
 
 export const actions = {};
 
@@ -58,14 +58,17 @@ export default class Action {
 
   perform(actor, target, state){
     this.validate(actor, target, state);
+    let effects = [];
 
     if(this.consumesActivation){
-      state.activationsRemaining--;
+      effects.push(new ConsumeActivationEffect());
     }
-    actor.ap -= this.apCost;
-    actor.mcp -= this.mcpCost;
-
-    let effects = [];
+    if(this.apCost){
+      effects.push(new APModEffect(actor, -this.apCost));
+    }
+    if(this.mcpCost){
+      effects.push(new MCPModEffect(actor, -this.mcpCost));
+    }
 
     for(let key in state.units){
       let unit = state.units[key];
@@ -76,48 +79,51 @@ export default class Action {
       }
     };
 
-    //TODO: apply all the events here (for now)
-
-    //effects = effects.flatten();
-    //return new AbilityEvent(this, actor, target, effects);
+    return new AbilityEvent(this, actor, target, effects.flat(10));
   }
 
   unitCommonPerform(actor, thisTarget, state, magnitude){
+    let effects = [];
+
     if(this.tags.magic && thisTarget.statusTags()['magic immune']){
-      return;
+      return effects;
     }
 
     for(var key in this.formulas){
       switch(key){
         case "damage":
-          thisTarget.damage(this.formulas.damage.compute(magnitude, actor, thisTarget));
+          effects.push(new DamageEffect(thisTarget, this.formulas.damage.compute(magnitude, actor, thisTarget)));
           if(this.tags.physical){
-            thisTarget.triggerStun();
+            effects.push(new StunTriggeredEffect(thisTarget));
           }
           break;
         case "healing":
-          thisTarget.heal(this.formulas.healing.compute(magnitude, actor, thisTarget));
+          effects.push(new HealEffect(thisTarget, this.formulas.healing.compute(magnitude, actor, thisTarget)));
           break;
         case "ap mod":
-          thisTarget.ap += this.formulas['ap mod'].compute(magnitude, actor, thisTarget);
+          effects.push(new APModEffect(thisTarget, this.formulas['ap mod'].compute(magnitude, actor, thisTarget)));
           break;
         case "awaken":
-          thisTarget.awaken(this.formulas.awaken.compute(magnitude, actor, thisTarget));
+          effects.push(new AwakenEffect(thisTarget, this.formuals.awaken.compute(magnitude, actor, thisTarget)));
+          break;
       }
     }
 
     if(this.tags.dispel){
-      thisTarget.statuses = thisTarget.statuses.filter(x => !x.tags.magic);
+      this.target.statuses.filter(x => x.tags.magic).forEach(x => {
+        effects.push(new StatusDispelledEffect(thisTarget, x));
+      });
     }
 
     this.statuses.forEach(x => {
-      let computed = x.compute(magnitude, actor, thisTarget);
-      thisTarget.statuses.push(computed);
+      effects.push(new StatusAppliedEvent(thisTarget, x.compute(magnitude, actor, thisTarget)));
     });
 
+    return effects;
   }
 
   unitPerform(actor, thisTarget, state, magnitude){
+    return [];
   }
 
   status(){

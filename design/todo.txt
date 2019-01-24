@@ -1,6 +1,9 @@
 Progress:
   switch abilites over into returning events instead of applying directly to the unitstate
       Needed for animations and logs
+  What about when an effect triggers something?
+    It probably shouldn't be a new action when it's a stun, etc
+    but it can be grouped into a new phase of effects
   Seek feedback
   UI Animations
   Randomness
