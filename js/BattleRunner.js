@@ -17,6 +17,13 @@ export default class BattleRunner{
   runStep(){
     if(this.battle.state.finished()){
       return this.battle.state.victor();
+
+    }else if(this.battle.state.triggerQueue.length > 0){
+      this.battle.doTrigger();
+      if(this.ui != undefined){
+        this.ui.update();
+      }
+
     }else{
       let turn = this.players[this.battle.state.activePlayer].getTurn();
       return turn.then(t => {

@@ -4,6 +4,7 @@ import Patterns from "./PatternSpec.js";
 import Targets from "./TargetSpec.js";
 import {ConstantFormula} from "./Formula.js";
 import StatusTemplate from "./StatusTemplate.js";
+import {APModEffect, SwapEffect} from "./BattleEvents.js";
 
 class Guard extends Action{
   constructor(){
@@ -34,13 +35,10 @@ class Swap extends Action{
   }
 
   unitPerform(actor, thisTarget, state, magnitude){
-    thisTarget.ap -= numbers.swapCost;
-    let xt = thisTarget.x;
-    let yt = thisTarget.y;
-    thisTarget.x = actor.x;
-    thisTarget.y = actor.y;
-    actor.x = xt;
-    actor.y = yt;
+    return [
+      new SwapEffect(actor, thisTarget),
+      new APModEffect(thisTarget, -numbers.swapCost)
+    ]
   }
 }
 

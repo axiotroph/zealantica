@@ -1,7 +1,7 @@
 import Unit from "./Unit.js";
 import classes from "./Class.js";
 import newUID from "./UID.js";
-import {NextTurn as NextTurnEvent} from "./BattleEvents.js";
+import {NextTurnEvent} from "./BattleEvents.js";
 
 import Log from "./Log.js";
 let log = Log("BattleState");
@@ -15,12 +15,13 @@ export default class BattleState{
     this.events = [];
     if(!priorState || !next){
       this.initInitialState();
-    }else if(next['action']){
-      this.initFromPrior(priorState, next.action);
-    }else if(next['special'] == 'nextTurn'){
-      this.initNextTurn(priorState);
+    }else if(this.triggerQueue.length == 0 && next){
+      this.initFromPrior(priorState, next.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this));
+    }else if(priorState.triggerQueue.length > 0){
+      this.initFromPrior(priorState.triggerQueue[0]);
+      this.triggerQueue.pop();
     }else{
-      throw "don't know how to init a new turn from a state and " + JSON.stringify(next);
+      throw "don't know how to make forward progress";
     }
   }
 
@@ -59,6 +60,8 @@ export default class BattleState{
 
     this.activePlayer = Math.floor(Math.random() * 2);
     this.turnCount = 0;
+    this.event = null;
+    this.triggerQueue = [];
     this.endTurnChecks();
   }
 
@@ -67,6 +70,7 @@ export default class BattleState{
     this.turnCount = prior.turnCount;
     this.activationsRemaining = prior.activationsRemaining;
     this.activePlayer = prior.activePlayer;
+    this.triggerQueue = prior.triggerQueue.map(x => x);
 
     this.units = {};
     for(var key in prior.units){
@@ -76,29 +80,22 @@ export default class BattleState{
 
   initFromPrior(prior, turn){
     this.clonePrior(prior);
-    let abilityEvent = turn.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this);
-    //this.events.push(new AbilityEvent(turn.action, turn.actor, turn.target, null));
+    this.event = turn.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this);
+    this.event.effects.map(x => x.apply(this));
     this.endTurnChecks();
   }
 
-  initNextTurn(prior){
-    this.clonePrior(prior);
-    this.activationsRemaining = 0;
-    this.endTurnChecks();
+  newTurn(){
+    this.turnCount++;
+    this.activePlayer = (this.activePlayer + 1) % 2;
+
+    this.activeUnits().forEach((u) => u.nextTurn());
+    this.activationsRemaining = Math.min(5, this.turnCount);
   }
 
   endTurnChecks(){
     if(this.activeUnits().every((u) => !u.canAct(this)) || this.activationsRemaining <= 0){
-      this.turnCount++;
-      this.activePlayer = (this.activePlayer + 1) % 2;
-
-      this.activeUnits().forEach((u) => u.nextTurn());
-      this.activationsRemaining = Math.min(5, this.turnCount);
-
-      this.events.push(new NextTurnEvent(this.turnCount));
-
-      log.info("Starting turn " + this.turnCount);
-      this.endTurnChecks();
+      this.triggerQueue.push(new NextTurnEvent());
     }
   }
 

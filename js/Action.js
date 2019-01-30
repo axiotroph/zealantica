@@ -1,5 +1,7 @@
 import newUID from "./UID.js";
-import {AbilityEvent, StatusAppliedEvent, NumericalModEvent, EffectAppliedEvent} from "./BattleEvents.js";
+import {AbilityEvent, DamageEffect, HealEffect, APModEffect, MCPModEffect, 
+  AwakenEffect, StunTriggeredEffect,  ConsumeActivationEffect, 
+  StatusAppliedEffect, StatusDispelledEffect} from "./BattleEvents.js";
 
 export const actions = {};
 
@@ -104,7 +106,7 @@ export default class Action {
           effects.push(new APModEffect(thisTarget, this.formulas['ap mod'].compute(magnitude, actor, thisTarget)));
           break;
         case "awaken":
-          effects.push(new AwakenEffect(thisTarget, this.formuals.awaken.compute(magnitude, actor, thisTarget)));
+          effects.push(new AwakenEffect(thisTarget, this.formulas.awaken.compute(magnitude, actor, thisTarget)));
           break;
       }
     }
@@ -116,7 +118,7 @@ export default class Action {
     }
 
     this.statuses.forEach(x => {
-      effects.push(new StatusAppliedEvent(thisTarget, x.compute(magnitude, actor, thisTarget)));
+      effects.push(new StatusAppliedEffect(thisTarget, x.compute(magnitude, actor, thisTarget)));
     });
 
     return effects;

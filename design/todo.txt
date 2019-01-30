@@ -1,4 +1,6 @@
 Progress:
+  fix battlerunner so that it works with the new way of events and ai uses it
+    there's some inconsistency in definition between "event"/"effect"/"action" and what gets calculated where; that could use some design effort
   switch abilites over into returning events instead of applying directly to the unitstate
       Needed for animations and logs
   What about when an effect triggers something?
