@@ -1,7 +1,7 @@
 import Unit from "./Unit.js";
 import classes from "./Class.js";
 import newUID from "./UID.js";
-import {NextTurnEvent} from "./BattleEvents.js";
+import {NextTurnEvent} from "./Event.js";
 
 import Log from "./Log.js";
 let log = Log("BattleState");
@@ -10,18 +10,16 @@ let built = false;
 
 export default class BattleState{
 
-  constructor(priorState, next){
+  constructor(priorState, event){
     this.id = newUID();
     this.events = [];
-    if(!priorState || !next){
+    if(!priorState){
       this.initInitialState();
-    }else if(this.triggerQueue.length == 0 && next){
-      this.initFromPrior(priorState, next.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this));
-    }else if(priorState.triggerQueue.length > 0){
-      this.initFromPrior(priorState.triggerQueue[0]);
-      this.triggerQueue.pop();
     }else{
-      throw "don't know how to make forward progress";
+      if(event){
+        this.eventQueue.push(event);
+      }
+      this.initFromPrior(this.eventQueue.shift());
     }
   }
 
@@ -61,7 +59,7 @@ export default class BattleState{
     this.activePlayer = Math.floor(Math.random() * 2);
     this.turnCount = 0;
     this.event = null;
-    this.triggerQueue = [];
+    this.eventQueue = [];
     this.endTurnChecks();
   }
 
@@ -70,7 +68,7 @@ export default class BattleState{
     this.turnCount = prior.turnCount;
     this.activationsRemaining = prior.activationsRemaining;
     this.activePlayer = prior.activePlayer;
-    this.triggerQueue = prior.triggerQueue.map(x => x);
+    this.eventQueue = prior.eventQueue.map(x => x);
 
     this.units = {};
     for(var key in prior.units){
@@ -78,10 +76,11 @@ export default class BattleState{
     }
   }
 
-  initFromPrior(prior, turn){
+  initFromPrior(prior, event){
     this.clonePrior(prior);
-    this.event = turn.action.perform(this.units[turn.actor.id], this.units[turn.target.id], this);
-    this.event.effects.map(x => x.apply(this));
+    this.event = event;
+    this.eventResult = event.compute(this);
+    this.eventResult.effects.map(x => x.apply(this));
     this.endTurnChecks();
   }
 
@@ -95,7 +94,7 @@ export default class BattleState{
 
   endTurnChecks(){
     if(this.activeUnits().every((u) => !u.canAct(this)) || this.activationsRemaining <= 0){
-      this.triggerQueue.push(new NextTurnEvent());
+      this.eventQueue.push(new NextTurnEvent());
     }
   }
 

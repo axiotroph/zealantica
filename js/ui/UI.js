@@ -137,7 +137,7 @@ export default class UIPlayer extends Player{
 
   getTurn(){
     log.trace("waiting for turn imput");
-    return this.getActor().then(this.getTarget.bind(this));
+    return this.getActor().then(this.getTarget.bind(this)).then(turnData => new AbilityEvent(turnData.ability, turnData.actor, turnData.target));
   }
 
   getActor(){

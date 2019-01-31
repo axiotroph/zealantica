@@ -1,32 +1,6 @@
 import Log from "./Log.js";
 let log = Log("battle event");
 
-export class NextTurnEvent{
-  constructor(turn){
-    this.type = "nextTurn";
-    this.turn = turn;
-    this.effects = [new NextTurnEffect()];
-  }
-
-  userString(){
-    return "\nTurn " + this.turn + " begins"
-  }
-}
-
-export class AbilityEvent{
-  constructor(ability, actor, target, effects){
-    this.type = "ability";
-    this.ability = ability;
-    this.actor = actor;
-    this.target = target;
-    this.effects = effects;
-  }
-
-  userString(){
-    return this.actor.name() + " uses " + this.ability.name + " targeting " + this.target.name() + " doing stuff";
-  }
-}
-
 class Effect{
   userString(){
     return JSON.stringify(this);

@@ -1,0 +1,7 @@
+'effect': one minimal atomic, concrete change to the battle state
+'eventResult': a logical grouping of effects
+'event': a single "thing", like an ability being activated or triggered, or a turn change
+
+The reason for this grouping is mostly
+  - calculate all effects of a single event against the prior state
+  - display them all together smartly

@@ -8,11 +8,11 @@ let log = Log("main");
 
 class Zealantica {
   go() {
-    let battle = new Battle();
     let ui = new UI();
     let ai1 = defaultAi(0, battle);
     let ai2 = defaultAi(1, battle);
-    let runner = new BattleRunner(battle, {0: ai1, 1: ui}, ui);
+    throw("break this cycle");
+    let battle = new Battle(battle, {0: ui, 1: ui}, ui);
 
     document.battle = battle;
     document.ui = ui;

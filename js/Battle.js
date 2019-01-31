@@ -5,19 +5,41 @@ let log = Log("battle");
 
 export default class Battle{
 
-  constructor(){
+  constructor(players, ui){
     this.state = new BattleState();
+    this.players = players;
+    this.ui = ui;
   }
 
-  applyAction(action){
-    this.state = new BattleState(this.state, {'action': action});
-    log.user(this.state.event.userString());
-    this.state.events.forEach(x => log.user(x.userString()));
+  run(){
+    let load = (this.ui == undefined) ? Promise.resolve() : this.ui.load(this.battle);
+
+    return load.then(this.runStep.bind(this));
   }
 
-  doTrigger(){
-    this.state = new BattleState(this.state);
-    log.user(this.state.event.userString());
+  runStep(){
+    if(this.state.finished()){
+      return this.state.victor();
+    }else if(this.state.triggerQueue.length > 0){
+      this.state = new BattleState(this.state);
+      this.updateUI();
+      return this.runStep();
+    }else{
+      let event = this.players[this.state.activePlayer].getTurn();
+      return event.then(t => {
+        if(t == undefined){
+          throw "got undefined turn?";
+        }
+        this.state = new BattleState(this.state, t);
+        this.updateUI();
+      }).then(this.runStep.bind(this));
+    }
+  }
+
+  updateUI(){
+    if(this.ui != undefined){
+      this.ui.update();
+    }
   }
 
   status(){
