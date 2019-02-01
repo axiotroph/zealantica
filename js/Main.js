@@ -9,8 +9,9 @@ class Zealantica {
   go() {
     let ui = new UI();
     let battle = new Battle(ui);
-    //let ai1 = defaultAi(0, battle);
-    battle.setPlayers({0: ui, 1: ui});
+    let ai1 = defaultAi(0, battle);
+    //let ai2 = defaultAi(1, battle);
+    battle.setPlayers({0: ai1, 1: ui});
 
     document.battle = battle;
     document.ui = ui;

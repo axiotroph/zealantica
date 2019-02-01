@@ -14,16 +14,29 @@ export class AbilityEvent{
   compute(state){
     return new EventResult(this.ability.perform(this.actor, this.target, state));
   }
+
+  userString(){
+    return "...";
+  }
 }
+
 
 export class NextTurnEvent{
   compute(state){
     return new EventResult([new NextTurnEffect()]);
+  }
+
+  userString(){
+    return "...";
   }
 }
 
 export class EventResult{
   constructor(effects){
     this.effects = effects;
+  }
+
+  userString(){
+    return "...";
   }
 }

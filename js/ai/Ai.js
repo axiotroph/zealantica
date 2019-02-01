@@ -1,4 +1,5 @@
 import Player from "../Player.js";
+import {AbilityEvent} from "../Event.js";
 import heuristic from "./HeuristicEvaluator.js"
 import greedy from "./GreedyStrategy.js"
 
@@ -27,7 +28,7 @@ class Ai extends Player{
 
     let delay = new Promise(resolve => setTimeout(resolve, 200));
     let moves = this.enumerateMoves(this.battle);
-    let choice = this.selectionStrategy(this.battle.state, moves, this.evaluationStrategy, this.player);
+    let choice = this.selectionStrategy(this.battle, moves, this.evaluationStrategy, this.player);
 
     return delay.then(() => Promise.resolve(choice));
   }
@@ -48,11 +49,7 @@ class Ai extends Player{
         for(var targetKey in battle.state.units){
           let target = battle.state.units[targetKey];
           if(action.canTarget(actor, target, battle.state)){
-            result.push({
-              actor: actor,
-              target: target,
-              action: action
-            });
+            result.push(new AbilityEvent(action, actor, target));
           }
         }
       }

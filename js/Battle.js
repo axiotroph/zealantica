@@ -1,4 +1,5 @@
 import BattleState from "./BattleState.js";
+import {NextTurnEvent} from "./Event.js";
 
 import Log from "./Log.js";
 let log = Log("battle");
@@ -39,7 +40,18 @@ export default class Battle{
     }
   }
 
+  speculate(event){
+    let state = new BattleState(this.state, event);
+    while(state.eventQueue.length > 0){
+      state = new BattleState(state);
+    }
+
+    return state;
+  }
+
   updateUI(){
+    log.user(this.state.event.userString());
+    log.user(this.state.eventResult.userString());
     if(this.ui != undefined){
       this.ui.update();
     }

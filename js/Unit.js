@@ -37,9 +37,6 @@ export default class Unit {
     this.ap += this.stats().ala;
     this.mcp = Math.min(numbers.maxMCP, this.mcp+1);
 
-    if(this.stunnedTime == 1){
-      log.info(this.name() + " recovers from stun");
-    }
     this.stunnedTime = Math.max(0, this.stunnedTime-1);
 
     if(!this.stunTripped){
@@ -93,7 +90,6 @@ export default class Unit {
 
     this.health = Math.max(0, this.health - amount);
     if(!this.isAlive()){
-      log.info(this.name() + " dies!");
       return;
     }
   }
@@ -103,7 +99,6 @@ export default class Unit {
       this.stunTripped = true;
       this.stunCounter++;
       if(this.stunCounter == 3){
-        log.info(this.name() + " is stunned!");
         this.stunCounter = 0;
         this.stunnedTime = 2;
       }
