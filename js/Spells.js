@@ -72,7 +72,7 @@ const spells = {
       "assets/deep_insight.png",
       {},
       [new StatusTemplate(
-        new Formula(1.5, 75, {'int': 0.25}, 75, {'wis': 0.25}),
+        new Formula(1.6, 75, {'int': 0.25}, 75, {'wis': 0.25}),
         {'def': new Formula(-20, 0, {'int': 1}, 0, {'wis': 1})},
         {'magic': true},
         {},

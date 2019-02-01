@@ -108,7 +108,7 @@ const classes = {
       'atk': 75,
       'def': 115,
       'vit': 115,
-      'int': 60,
+      'int': 70,
       'wis': 85,
       'ala': 65,
     },
