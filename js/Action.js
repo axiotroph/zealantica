@@ -113,7 +113,7 @@ export default class Action {
     }
 
     if(this.tags.dispel){
-      this.target.statuses.filter(x => x.tags.magic).forEach(x => {
+      thisTarget.statuses.filter(x => x.tags.magic).forEach(x => {
         effects.push(new StatusDispelledEffect(thisTarget, x));
       });
     }

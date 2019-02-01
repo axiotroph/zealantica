@@ -1,3 +1,5 @@
+import newUID from "./UID.js";
+
 export default class Status{
   constructor(){
     this.stats = {};
@@ -5,6 +7,7 @@ export default class Status{
     this.applies = {};
     this.duration = 0;
     this.name = "[default status effect]";
+    this.id = newUID();
   }
 
   clone(){

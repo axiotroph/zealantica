@@ -52,7 +52,7 @@ export class StatusDispelledEffect extends Effect{
   }
 
   apply(state){
-    log.error("todo");
+    state.units[this.target.id].statuses = state.units[this.target.id].statuses.filter(x => x.id != this.status.id);
   }
 }
 

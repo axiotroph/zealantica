@@ -1,4 +1,5 @@
 import Status from "./Status.js";
+import newUID from "./UID.js";
 
 export default class StatusTemplate{
   constructor(duration, stats, tags, applies, name){
