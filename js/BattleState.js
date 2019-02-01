@@ -16,10 +16,11 @@ export default class BattleState{
     if(!priorState){
       this.initInitialState();
     }else{
+      this.clonePrior(priorState);
       if(event){
         this.eventQueue.push(event);
       }
-      this.initFromPrior(this.eventQueue.shift());
+      this.initFromPrior();
     }
   }
 
@@ -76,10 +77,9 @@ export default class BattleState{
     }
   }
 
-  initFromPrior(prior, event){
-    this.clonePrior(prior);
-    this.event = event;
-    this.eventResult = event.compute(this);
+  initFromPrior(){
+    this.event = this.eventQueue.shift();
+    this.eventResult = this.event.compute(this);
     this.eventResult.effects.map(x => x.apply(this));
     this.endTurnChecks();
   }

@@ -5,14 +5,17 @@ let log = Log("battle");
 
 export default class Battle{
 
-  constructor(players, ui){
+  constructor(ui){
     this.state = new BattleState();
-    this.players = players;
     this.ui = ui;
   }
 
+  setPlayers(players){
+    this.players = players;
+  }
+
   run(){
-    let load = (this.ui == undefined) ? Promise.resolve() : this.ui.load(this.battle);
+    let load = (this.ui == undefined) ? Promise.resolve() : this.ui.load(this);
 
     return load.then(this.runStep.bind(this));
   }
@@ -20,7 +23,7 @@ export default class Battle{
   runStep(){
     if(this.state.finished()){
       return this.state.victor();
-    }else if(this.state.triggerQueue.length > 0){
+    }else if(this.state.eventQueue.length > 0){
       this.state = new BattleState(this.state);
       this.updateUI();
       return this.runStep();

@@ -4,7 +4,7 @@ import Patterns from "./PatternSpec.js";
 import Targets from "./TargetSpec.js";
 import {ConstantFormula} from "./Formula.js";
 import StatusTemplate from "./StatusTemplate.js";
-import {APModEffect, SwapEffect} from "./BattleEvents.js";
+import {APModEffect, SwapEffect} from "./Effect.js";
 
 class Guard extends Action{
   constructor(){

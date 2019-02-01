@@ -1,6 +1,8 @@
 import frame from "./Frame.js";
 import Player from "../Player.js";
 import Log, {logText} from "../Log.js";
+import {AbilityEvent} from "../Event.js";
+
 let log = Log("UI");
 
 const hoverBorderColor = 0x6699ee;
@@ -137,7 +139,7 @@ export default class UIPlayer extends Player{
 
   getTurn(){
     log.trace("waiting for turn imput");
-    return this.getActor().then(this.getTarget.bind(this)).then(turnData => new AbilityEvent(turnData.ability, turnData.actor, turnData.target));
+    return this.getActor().then(this.getTarget.bind(this)).then(turnData => new AbilityEvent(turnData.action, turnData.actor, turnData.target));
   }
 
   getActor(){
@@ -155,11 +157,6 @@ export default class UIPlayer extends Player{
         }
       };
     });
-  }
-
-  getAction(turnData){
-    turnData.action = turnData.actor.abilities[0];
-    return Promise.resolve(turnData);
   }
 
   getTarget(turnData){

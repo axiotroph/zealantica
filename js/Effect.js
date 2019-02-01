@@ -11,7 +11,7 @@ class Effect{
   }
 }
 
-class NextTurnEffect extends Effect{
+export class NextTurnEffect extends Effect{
   apply(state){
     state.newTurn();
   }
@@ -19,6 +19,7 @@ class NextTurnEffect extends Effect{
 
 export class StatusAppliedEffect extends Effect{
   constructor(target, status){
+    super();
     this.target = target;
     this.status = status;
   }
@@ -63,8 +64,8 @@ export class SwapEffect extends Effect{
   }
 
   apply(state){
-    let t1 = state.units[target.id];
-    let t2 = state.units[target2.id];
+    let t1 = state.units[this.target.id];
+    let t2 = state.units[this.target2.id];
 
     let xt = t1.x;
     let yt = t1.y;

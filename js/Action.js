@@ -1,7 +1,8 @@
 import newUID from "./UID.js";
-import {AbilityEvent, DamageEffect, HealEffect, APModEffect, MCPModEffect, 
+import {DamageEffect, HealEffect, APModEffect, MCPModEffect, 
   AwakenEffect, StunTriggeredEffect,  ConsumeActivationEffect, 
-  StatusAppliedEffect, StatusDispelledEffect} from "./BattleEvents.js";
+  StatusAppliedEffect, StatusDispelledEffect} from "./Effect.js";
+import {AbilityEvent} from "./Event.js";
 
 export const actions = {};
 
@@ -81,7 +82,7 @@ export default class Action {
       }
     };
 
-    return new AbilityEvent(this, actor, target, effects.flat(10));
+    return effects.flat(10);
   }
 
   unitCommonPerform(actor, thisTarget, state, magnitude){

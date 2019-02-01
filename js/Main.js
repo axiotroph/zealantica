@@ -1,7 +1,6 @@
 import UI from "./ui/UI.js";
 import defaultAi from "./ai/Ai.js";
 import Battle from "./Battle.js";
-import BattleRunner from "./BattleRunner.js";
 
 import Log from "./Log.js";
 let log = Log("main");
@@ -9,15 +8,14 @@ let log = Log("main");
 class Zealantica {
   go() {
     let ui = new UI();
-    let ai1 = defaultAi(0, battle);
-    let ai2 = defaultAi(1, battle);
-    throw("break this cycle");
-    let battle = new Battle(battle, {0: ui, 1: ui}, ui);
+    let battle = new Battle(ui);
+    //let ai1 = defaultAi(0, battle);
+    battle.setPlayers({0: ui, 1: ui});
 
     document.battle = battle;
     document.ui = ui;
 
-    runner.run().then(
+    battle.run().then(
       victor => log.info("Battle victor is " + victor),
       err => {
         log.fatal("Unhandled error");
