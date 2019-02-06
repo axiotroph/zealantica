@@ -5,6 +5,10 @@ export function logText(){
 }
 
 function write(writer, prefix, severity, content, raw) {
+  if(content.length == 0){
+    return;
+  }
+
   let str = '[' + prefix + '][' + writer.name + ']: ' + content;
   console.log(str);
 

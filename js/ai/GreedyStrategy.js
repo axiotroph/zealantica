@@ -6,7 +6,7 @@ export default function select(battle, options, heuristic, player){
 
   options.forEach(opt => {
     let result = battle.speculate(opt);
-    let score = heuristic(result, player);
+    let [score, desc] = heuristic(result, player);
 
     if(score > best){
       best = score;

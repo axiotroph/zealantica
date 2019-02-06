@@ -16,7 +16,7 @@ export class AbilityEvent{
   }
 
   userString(){
-    return "...";
+    return this.actor.name() + " uses " + this.ability.name + " on " + this.target.name();
   }
 }
 
@@ -27,7 +27,7 @@ export class NextTurnEvent{
   }
 
   userString(){
-    return "...";
+    return "";
   }
 }
 
@@ -37,6 +37,6 @@ export class EventResult{
   }
 
   userString(){
-    return "...";
+    return this.effects.map(x => x.userString()).join("\n");
   }
 }

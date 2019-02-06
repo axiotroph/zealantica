@@ -3,7 +3,7 @@ let log = Log("battle event");
 
 class Effect{
   userString(){
-    return JSON.stringify(this);
+    return this.constructor.name;
   }
 
   apply(state){

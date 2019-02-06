@@ -50,6 +50,7 @@ export default class Battle{
   }
 
   updateUI(){
+    log.user(" ");
     log.user(this.state.event.userString());
     log.user(this.state.eventResult.userString());
     if(this.ui != undefined){

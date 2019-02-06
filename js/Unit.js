@@ -52,14 +52,14 @@ export default class Unit {
     if(state == undefined){
       throw "state required";
     }
-    return this.ap > 100 && this.isAlive() && !this.isStunned() && !this.isGuarding();
+    return this.isAlive() && !this.isStunned() && !this.isGuarding();
   }
 
   canAct(state){
     if(state == undefined){
       throw "state required";
     }
-    return state.activePlayer == this.player && this.couldAct(state);
+    return state.activePlayer == this.player && this.couldAct(state) && this.ap > 100;
   }
 
   isAlive(){
