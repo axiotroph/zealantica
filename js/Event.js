@@ -37,6 +37,19 @@ export class EventResult{
   }
 
   userString(){
-    return this.effects.map(x => x.userString()).join("\n");
+    let results = {}
+    let a = this.effects.map(x => x.results());
+    let b = a.flat(10);
+
+
+    this.effects.map(x => x.results()).flat(10).map(res => {
+      if(!results[res.key]){
+        results[res.key] = [];
+      }
+      results[res.key].push(res);
+    });
+
+    let resultString = Object.keys(results).map(k => results[k][0].reduceToUserString(results[k])).map(x => "  " + x).join("\n");
+    return resultString;
   }
 }

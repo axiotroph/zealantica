@@ -90,6 +90,7 @@ export default class BattleState{
 
     this.activeUnits().forEach((u) => u.nextTurn());
     this.activationsRemaining = Math.min(5, this.turnCount);
+    return this.turnCount;
   }
 
   endTurnChecks(){

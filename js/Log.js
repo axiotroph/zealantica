@@ -19,7 +19,7 @@ function write(writer, prefix, severity, content, raw) {
       logData.push(str);
     }
 
-    while(logData.length > 20){
+    while(logData.length > 40){
       logData.shift();
     }
   }
