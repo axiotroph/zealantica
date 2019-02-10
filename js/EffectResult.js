@@ -8,6 +8,27 @@ class EffectResult{
   }
 }
 
+export class StunTriggeredEffectResult extends EffectResult{
+  constructor(target, result){
+    super("stun triggered" + "." + result);
+    this.result = result;
+    this.target = target; 
+  }
+
+  reduceToUserString(effectResults){
+    switch(effectResults.length){
+      case 0:
+        throw "what";
+      case 1:
+        return effectResults[0].target.name() + " is " + this.result;
+      case 2:
+        return effectResults[0].target.name() + ", " + effectResults[1].target.name() + " are " + this.result;
+      default:
+        return effectResults.length + " targets are " + this.result;
+    }
+  }
+}
+
 class TargetNumericalEffectResult extends EffectResult{
   constructor(type, target, amount){
     super(type);

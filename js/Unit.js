@@ -101,7 +101,12 @@ export default class Unit {
       if(this.stunCounter == 3){
         this.stunCounter = 0;
         this.stunnedTime = 2;
+        return "stunned";
+      }else{
+        return "combo " + this.stunCounter;
       }
+    }else{
+      return false;
     }
   }
 

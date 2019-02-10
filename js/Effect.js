@@ -1,4 +1,4 @@
-import {HealingResult, DamageResult, APResult, MCPResult, NextTurnResult} from "./EffectResult.js";
+import {HealingResult, DamageResult, APResult, MCPResult, NextTurnResult, StunTriggeredEffectResult} from "./EffectResult.js";
 import Log from "./Log.js";
 let log = Log("battle event");
 
@@ -155,12 +155,15 @@ export class AwakenEffect extends NumericalModEffect{
 
 export class StunTriggeredEffect extends SimpleEffectAppliedEffect{
   apply(state){
-    state.units[this.target.id].triggerStun();
+    this.result = state.units[this.target.id].triggerStun();
   }
 
   results(){
-    //TODO
-    return [];
+    if(this.result){
+      return [new StunTriggeredEffectResult(this.target, this.result)];
+    }else{
+      return [];
+    }
   }
 }
 
